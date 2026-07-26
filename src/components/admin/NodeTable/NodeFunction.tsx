@@ -6,7 +6,13 @@ import { Terminal, Trash2, Copy, Download, DollarSign } from "lucide-react";
 import { t } from "i18next";
 import type { Row } from "@tanstack/react-table";
 import { EditDialog } from "./NodeEditDialog";
-import { quotePowerShellArg, quoteShellArgs } from "@/utils/shellQuote";
+import { quotePowerShellArg, quoteShellArg, quoteShellArgs } from "@/utils/shellQuote";
+import {
+  scriptURLForPlatform,
+  setBooleanAgentArg,
+  useAgentDistribution,
+  withRequiredAgentArgs,
+} from "@/lib/agentDistribution";
 import {
   Button,
   Checkbox,
@@ -37,12 +43,13 @@ type InstallOptions = {
 type Platform = "linux" | "windows" | "macos";
 
 export function ActionsCell({ row }: { row: Row<z.infer<typeof schema>> }) {
+  const agentDistribution = useAgentDistribution();
   const refreshTable = React.useContext(DataTableRefreshContext);
   const [removing, setRemoving] = React.useState(false);
   const [selectedPlatform, setSelectedPlatform] =
     React.useState<Platform>("linux");
   const [installOptions, setInstallOptions] = React.useState<InstallOptions>({
-    disableWebSsh: false,
+    disableWebSsh: true,
     disableAutoUpdate: false,
     ignoreUnsafeCert: false,
     ghproxy: "",
@@ -53,11 +60,12 @@ export function ActionsCell({ row }: { row: Row<z.infer<typeof schema>> }) {
   const generateCommand = () => {
     const host = window.location.origin;
     const token = row.original.token ?? "";
-    const args: string[] = ["-e", host, "-t", token];
+    const args = withRequiredAgentArgs(
+      ["-e", host, "-t", token],
+      agentDistribution,
+    );
     // 根据安装选项生成参数
-    if (installOptions.disableWebSsh) {
-      args.push("--disable-web-ssh");
-    }
+    setBooleanAgentArg(args, "--disable-web-ssh", installOptions.disableWebSsh);
     if (installOptions.disableAutoUpdate) {
       args.push("--disable-auto-update");
     }
@@ -87,13 +95,13 @@ export function ActionsCell({ row }: { row: Row<z.infer<typeof schema>> }) {
     switch (selectedPlatform) {
       case "linux":
         finalCommand =
-          `wget -qO- https://raw.githubusercontent.com/komari-monitor/komari-agent/refs/heads/main/install.sh | sudo bash -s -- ` +
+          `wget -qO- ${quoteShellArg(scriptURLForPlatform(agentDistribution, selectedPlatform))} | sudo bash -s -- ` +
           quoteShellArgs(args);
         break;
       case "windows":
         finalCommand =
           `powershell.exe -NoProfile -ExecutionPolicy Bypass -Command ` +
-          `"iwr 'https://raw.githubusercontent.com/komari-monitor/komari-agent/refs/heads/main/install.ps1'` +
+          `"iwr ${quotePowerShellArg(scriptURLForPlatform(agentDistribution, selectedPlatform))}` +
           ` -UseBasicParsing -OutFile 'install.ps1'; &` +
           ` '.\\install.ps1'`;
         args.forEach((arg) => {
@@ -103,7 +111,7 @@ export function ActionsCell({ row }: { row: Row<z.infer<typeof schema>> }) {
         break;
       case "macos":
         finalCommand =
-          `zsh <(curl -sL https://raw.githubusercontent.com/komari-monitor/komari-agent/refs/heads/main/install.sh) ` +
+          `zsh <(curl -sL ${quoteShellArg(scriptURLForPlatform(agentDistribution, selectedPlatform))}) ` +
           quoteShellArgs(args);
         break;
     }

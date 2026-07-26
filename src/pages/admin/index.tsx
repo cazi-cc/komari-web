@@ -84,6 +84,13 @@ import {
 } from "@/components/admin/SettingCard";
 import { useSettings } from "@/lib/api";
 import { SelectOrInput } from "@/components/ui/select-or-input";
+import {
+  scriptURLForPlatform,
+  setAgentArgValue,
+  setBooleanAgentArg,
+  useAgentDistribution,
+  withRequiredAgentArgs,
+} from "@/lib/agentDistribution";
 
 
 const NodeDetailsPage = () => {
@@ -199,6 +206,7 @@ const AutoDiscoverySection = ({
   loading?: boolean;
 }) => {
   const { t } = useTranslation();
+  const agentDistribution = useAgentDistribution();
   const adKey: string = settings?.auto_discovery_key || "";
   const enabled = Boolean(adKey);
 
@@ -207,7 +215,7 @@ const AutoDiscoverySection = ({
   const [showOptions, setShowOptions] = React.useState(false);
   const [installOptions, setInstallOptions] =
     React.useState<AutoDiscoveryInstallOptions>({
-      disableWebSsh: false,
+      disableWebSsh: true,
       disableAutoUpdate: false,
       ignoreUnsafeCert: false,
       memoryIncludeCache: false,
@@ -219,7 +227,7 @@ const AutoDiscoverySection = ({
       includeNics: "",
       excludeNics: "",
       includeMountpoints: "",
-      interval: "",
+      interval: "5",
       monthRotate: "",
     });
 
@@ -231,7 +239,7 @@ const AutoDiscoverySection = ({
   const [enableExcludeNics, setEnableExcludeNics] = React.useState(false);
   const [enableIncludeMountpoints, setEnableIncludeMountpoints] =
     React.useState(false);
-  const [enableInterval, setEnableInterval] = React.useState(false);
+  const [enableInterval, setEnableInterval] = React.useState(true);
   const [enableMonthRotate, setEnableMonthRotate] = React.useState(false);
 
   const generateCommand = () => {
@@ -244,10 +252,11 @@ const AutoDiscoverySection = ({
       }
       return `http://${settings.script_domain.replace(/\/+$/, "")}`;
     })();
-    const args: string[] = ["-e", host, "--auto-discovery", adKey];
-    if (installOptions.disableWebSsh) {
-      args.push("--disable-web-ssh");
-    }
+    const args = withRequiredAgentArgs(
+      ["-e", host, "--auto-discovery", adKey],
+      agentDistribution,
+    );
+    setBooleanAgentArg(args, "--disable-web-ssh", installOptions.disableWebSsh);
     if (installOptions.disableAutoUpdate) {
       args.push("--disable-auto-update");
     }
@@ -296,28 +305,24 @@ const AutoDiscoverySection = ({
       args.push(`--include-mountpoint`);
       args.push(includeMountpoints);
     }
-    if (enableInterval) {
-      const intervalVal = Number.parseFloat(
-        (installOptions.interval || "").trim()
-      );
-      args.push("-i");
-      args.push(
-        Number.isFinite(intervalVal) && intervalVal >= 1
+    const intervalVal = Number.parseFloat((installOptions.interval || "").trim());
+    setAgentArgValue(
+      args,
+      ["-i", "--interval"],
+      "--interval",
+      enableInterval
+        ? Number.isFinite(intervalVal) && intervalVal >= 1
           ? String(intervalVal)
           : "1"
-      );
-    }
+        : null,
+    );
     if (enableMonthRotate) {
       const rotateVal = (installOptions.monthRotate || "").trim() || "1";
       args.push(`--month-rotate`);
       args.push(rotateVal);
     }
 
-    let scriptFile = "install.sh";
-    if (selectedPlatform === "windows") {
-      scriptFile = "install.ps1";
-    }
-    let scriptUrl = `https://raw.githubusercontent.com/komari-monitor/komari-agent/refs/heads/main/${scriptFile}`;
+    let scriptUrl = scriptURLForPlatform(agentDistribution, selectedPlatform);
     if (enableGhproxy && ghproxy) {
       scriptUrl = scriptUrl.slice(8); // 去掉 https://
       if (ghproxy.endsWith("/")) {
@@ -375,7 +380,7 @@ const AutoDiscoverySection = ({
           `touch .komari-auto-discovery.json && ` +
           `docker run -d --name komari-agent --restart=always ` +
           `-v .komari-auto-discovery.json:/app/auto-discovery.json ` +
-          `ghcr.io/komari-monitor/komari-agent:latest ` +
+          `${agentDistribution.docker_image} ` +
           quoteShellArgs(dockerArgs);
         break;
       }
@@ -1414,10 +1419,11 @@ type InstallOptions = {
   monthRotate: string;
 };
 function GenerateCommandButton({ node, settings }: { node: NodeDetail, settings: any }) {
+  const agentDistribution = useAgentDistribution();
   const [selectedPlatform, setSelectedPlatform] =
     React.useState<Platform>("linux");
   const [installOptions, setInstallOptions] = React.useState<InstallOptions>({
-    disableWebSsh: false,
+    disableWebSsh: true,
     disableAutoUpdate: false,
     ignoreUnsafeCert: false,
     memoryIncludeCache: false,
@@ -1429,7 +1435,7 @@ function GenerateCommandButton({ node, settings }: { node: NodeDetail, settings:
     includeNics: "",
     excludeNics: "",
     includeMountpoints: "",
-    interval: "",
+    interval: "5",
     monthRotate: "",
   });
 
@@ -1441,7 +1447,7 @@ function GenerateCommandButton({ node, settings }: { node: NodeDetail, settings:
   const [enableExcludeNics, setEnableExcludeNics] = React.useState(false);
   const [enableIncludeMountpoints, setEnableIncludeMountpoints] =
     React.useState(false);
-  const [enableInterval, setEnableInterval] = React.useState(false);
+  const [enableInterval, setEnableInterval] = React.useState(true);
   const [enableMonthRotate, setEnableMonthRotate] = React.useState(false);
 
   const generateCommand = () => {
@@ -1455,11 +1461,9 @@ function GenerateCommandButton({ node, settings }: { node: NodeDetail, settings:
       return `http://${settings.script_domain.replace(/\/+$/, "")}`;
     }();
     const token = node.token || "";
-    let args = ["-e", host, "-t", token];
+    const args = withRequiredAgentArgs(["-e", host, "-t", token], agentDistribution);
     // 根据安装选项生成参数
-    if (installOptions.disableWebSsh) {
-      args.push("--disable-web-ssh");
-    }
+    setBooleanAgentArg(args, "--disable-web-ssh", installOptions.disableWebSsh);
     if (installOptions.disableAutoUpdate) {
       args.push("--disable-auto-update");
     }
@@ -1510,22 +1514,23 @@ function GenerateCommandButton({ node, settings }: { node: NodeDetail, settings:
       args.push(`--include-mountpoint`);
       args.push(includeMountpoints);
     }
-    if (enableInterval) {
-      const intervalVal = Number.parseFloat((installOptions.interval || "").trim());
-      args.push("-i");
-      args.push(Number.isFinite(intervalVal) && intervalVal >= 1 ? String(intervalVal) : "1");
-    }
+    const intervalVal = Number.parseFloat((installOptions.interval || "").trim());
+    setAgentArgValue(
+      args,
+      ["-i", "--interval"],
+      "--interval",
+      enableInterval
+        ? Number.isFinite(intervalVal) && intervalVal >= 1
+          ? String(intervalVal)
+          : "1"
+        : null,
+    );
     if (enableMonthRotate) {
       const rotateVal = (installOptions.monthRotate || "").trim() || "1"; // 默认 1
       args.push(`--month-rotate`);
       args.push(rotateVal);
     }
-    let scriptFile = "install.sh";
-    if (selectedPlatform === "windows") {
-      scriptFile = "install.ps1";
-    }
-    let scriptUrl =
-      `https://raw.githubusercontent.com/komari-monitor/komari-agent/refs/heads/main/${scriptFile}`;
+    let scriptUrl = scriptURLForPlatform(agentDistribution, selectedPlatform);
     if (enableGhproxy) {
       if (enableGhproxy && ghproxy) {
         scriptUrl = scriptUrl.slice(8); // 去掉 https://
@@ -1578,7 +1583,7 @@ function GenerateCommandButton({ node, settings }: { node: NodeDetail, settings:
         }
         finalCommand =
           `docker run -d --name komari-agent --restart=always ` +
-          `ghcr.io/komari-monitor/komari-agent:latest ` +
+          `${agentDistribution.docker_image} ` +
           quoteShellArgs(dockerArgs);
         break;
       }
