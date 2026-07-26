@@ -97,6 +97,11 @@
       "icon": "Activity"
     },
     {
+      "labelKey": "tcp_quality.title",
+      "path": "/admin/tcp-quality",
+      "icon": "BarChart2"
+    },
+    {
       "labelKey": "sessions.title",
       "path": "/admin/sessions",
       "icon": "Users"

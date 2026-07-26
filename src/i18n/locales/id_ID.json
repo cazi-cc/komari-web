@@ -487,6 +487,9 @@
     }
   },
   "page_not_found": "Server tidak dapat menemukan halaman yang Anda minta.",
+  "tcp_quality": {
+    "title": "Kualitas TCP"
+  },
   "ping": {
     "all_servers": "Semua server",
     "all_servers_description": "Jika diaktifkan, server saat ini dan server baru berikutnya akan menjalankan pemantauan ini.",

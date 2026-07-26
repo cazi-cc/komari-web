@@ -487,6 +487,9 @@
     }
   },
   "page_not_found": "The server cannot find the specific page you're trying to access.",
+  "tcp_quality": {
+    "title": "TCP Quality"
+  },
   "ping": {
     "all_servers": "All servers",
     "all_servers_description": "When enabled, current and future servers will run this monitor.",

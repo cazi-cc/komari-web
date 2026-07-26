@@ -487,6 +487,9 @@
     }
   },
   "page_not_found": "真不巧，網頁被小鞠吃掉了。",
+  "tcp_quality": {
+    "title": "TCP 連線品質"
+  },
   "ping": {
     "all_servers": "全部伺服器",
     "all_servers_description": "勾選後，當前和後續新增的伺服器都會開啟該監測。",

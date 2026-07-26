@@ -163,6 +163,12 @@ export const routes: RouteObject[] = [
         ),
       },
       {
+        path: "tcp-quality",
+        element: React.createElement(
+          lazy(() => import("./pages/admin/tcpQuality"))
+        ),
+      },
+      {
         path: "about",
         element: React.createElement(lazy(() => import("./pages/admin/about"))),
       },

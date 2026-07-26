@@ -487,6 +487,9 @@
     }
   },
   "page_not_found": "残念ながら、ページは小鞠に食べられてしまいました。",
+  "tcp_quality": {
+    "title": "TCP 品質"
+  },
   "ping": {
     "all_servers": "すべてのサーバー",
     "all_servers_description": "有効にすると、現在および今後追加されるサーバーでこの監視が実行されます。",

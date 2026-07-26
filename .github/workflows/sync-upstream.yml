@@ -1,0 +1,63 @@
+name: Sync Upstream
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "41 3 * * 1"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  prepare-sync-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Merge upstream into a review branch
+        run: |
+          set -euo pipefail
+          git config user.name "cazi-upstream-sync"
+          git config user.email "actions@users.noreply.github.com"
+          git remote add upstream "https://github.com/komari-monitor/komari-web.git"
+          git fetch --no-tags upstream radix
+          git fetch --no-tags origin radix
+
+          if git merge-base --is-ancestor upstream/radix origin/radix; then
+            echo "The fork already contains the current upstream radix branch."
+            exit 0
+          fi
+
+          git checkout -B sync/upstream-radix origin/radix
+          git merge --no-edit upstream/radix
+          npm ci
+          npm run build
+          git push --force-with-lease origin sync/upstream-radix
+
+      - name: Create or update the review pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if git merge-base --is-ancestor upstream/radix origin/radix; then
+            exit 0
+          fi
+          if gh pr view sync/upstream-radix --json number >/dev/null 2>&1; then
+            gh pr edit sync/upstream-radix \
+              --title "chore: sync komari-monitor/komari-web radix" \
+              --body "Automated upstream merge. Review the fork-owned agent distribution and TCP quality administration before merging."
+          else
+            gh pr create \
+              --base radix \
+              --head sync/upstream-radix \
+              --title "chore: sync komari-monitor/komari-web radix" \
+              --body "Automated upstream merge. Review the fork-owned agent distribution and TCP quality administration before merging."
+          fi
