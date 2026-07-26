@@ -585,9 +585,6 @@
     }
   },
   "page_not_found": "真不巧，网页被小鞠吃掉了。",
-  "tcp_quality": {
-    "title": "TCP 连接质量"
-  },
   "ping": {
     "all_servers": "全部服务器",
     "all_servers_description": "勾选后，当前和后续新增的服务器都会开启该监测。",
@@ -1140,6 +1137,9 @@
     }
   },
   "status_settings": "状态显示设置",
+  "tcp_quality": {
+    "title": "TCP 连接质量"
+  },
   "terminal": {
     "disconnect": "连接已断开",
     "no_active_connection": "没有活动连接",
