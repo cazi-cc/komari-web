@@ -102,6 +102,11 @@
       "icon": "BarChart2"
     },
     {
+      "labelKey": "unlock_quality.title",
+      "path": "/admin/unlock-quality",
+      "icon": "ShieldCheck"
+    },
+    {
       "labelKey": "sessions.title",
       "path": "/admin/sessions",
       "icon": "Users"

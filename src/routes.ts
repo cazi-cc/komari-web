@@ -169,6 +169,12 @@ export const routes: RouteObject[] = [
         ),
       },
       {
+        path: "unlock-quality",
+        element: React.createElement(
+          lazy(() => import("./pages/admin/unlockQuality"))
+        ),
+      },
+      {
         path: "about",
         element: React.createElement(lazy(() => import("./pages/admin/about"))),
       },

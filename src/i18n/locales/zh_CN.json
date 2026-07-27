@@ -588,6 +588,9 @@
   "tcp_quality": {
     "title": "TCP 连接质量"
   },
+  "unlock_quality": {
+    "title": "解锁线路质量"
+  },
   "ping": {
     "all_servers": "全部服务器",
     "all_servers_description": "勾选后，当前和后续新增的服务器都会开启该监测。",
