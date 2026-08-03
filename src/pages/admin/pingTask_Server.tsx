@@ -68,23 +68,27 @@ const ServerRow: React.FC<{
     () => pingTasks.filter((t) => t.clients?.includes(nodeUuid)),
     [pingTasks, nodeUuid]
   );
+  const editableTasks = React.useMemo(
+    () => pingTasks.filter((task) => !task.managed_by_tcp_task),
+    [pingTasks],
+  );
 
   // 编辑状态（所选任务 id 集合）
   const [selectedIds, setSelectedIds] = React.useState<string[]>(
-    () => ownedTasks.filter((t) => t.id !== undefined).map((t) => String(t.id))
+    () => ownedTasks.filter((t) => t.id !== undefined && !t.managed_by_tcp_task).map((t) => String(t.id))
   );
 
   // 若任务或服务器改变，重置选择
   React.useEffect(() => {
     setSelectedIds(
-      ownedTasks.filter((t) => t.id !== undefined).map((t) => String(t.id))
+      ownedTasks.filter((t) => t.id !== undefined && !t.managed_by_tcp_task).map((t) => String(t.id))
     );
   }, [ownedTasks]);
 
   const handleSave = () => {
     setSaving(true);
     // 收集需要更新的任务（ membership 发生变化 ）
-    const toUpdate = pingTasks
+    const toUpdate = editableTasks
       .filter((task) => task.id !== undefined)
       .filter((task) => {
         const hasBefore = !!task.clients?.includes(nodeUuid);
@@ -158,7 +162,7 @@ const ServerRow: React.FC<{
                 <Selector
                   value={selectedIds}
                   onChange={setSelectedIds}
-                  items={[...pingTasks.filter((t) => t.id !== undefined)]}
+                  items={[...editableTasks.filter((t) => t.id !== undefined)]}
                   getId={(task) => String(task.id)}
                   getLabel={(task) => (
                     <span className="text-sm">
@@ -179,6 +183,11 @@ const ServerRow: React.FC<{
                     String(item.name).toLowerCase().includes(keyword.toLowerCase())
                   }
                 />
+                {ownedTasks.some((task) => task.managed_by_tcp_task) && (
+                  <p className="mt-2 text-xs text-gray-500">
+                    TCP 综合任务绑定的 ICMP 不在此处修改，请到“TCP 综合任务与节点目录”调整执行节点。
+                  </p>
+                )}
               </div>
               <Flex gap="2" justify="end" className="mt-4">
                 <Dialog.Close>

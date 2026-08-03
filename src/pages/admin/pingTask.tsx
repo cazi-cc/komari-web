@@ -23,6 +23,7 @@ import {
 import { Clock3 } from "lucide-react";
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { TaskView } from "./pingTask_Task";
 import { ServerView } from "./pingTask_Server";
@@ -51,10 +52,21 @@ const InnerLayout = () => {
   }
   return (
     <Flex direction="column" gap="4" className="p-4">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-wrap justify-between items-center gap-3">
         <label className="text-2xl font-bold">{t("ping.title")}</label>
-        <AddButton />
+        <Flex gap="2" wrap="wrap">
+          <Button asChild variant="soft">
+            <Link to="/admin/tcp-quality">从 TCP 目录新建综合任务</Link>
+          </Button>
+          <AddButton />
+        </Flex>
       </div>
+      <Flex gap="2" wrap="wrap">
+        <Button variant="solid">基础延迟与可用性</Button>
+        <Button asChild variant="soft" color="gray">
+          <Link to="/admin/tcp-quality">TCP 综合任务与节点目录</Link>
+        </Button>
+      </Flex>
       <Callout.Root color="green" variant="surface">
         <Callout.Icon>
           <Clock3 size={18} />

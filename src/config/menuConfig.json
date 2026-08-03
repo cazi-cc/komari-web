@@ -97,11 +97,6 @@
       "icon": "Activity"
     },
     {
-      "labelKey": "tcp_quality.title",
-      "path": "/admin/tcp-quality",
-      "icon": "BarChart2"
-    },
-    {
       "labelKey": "unlock_quality.title",
       "path": "/admin/unlock-quality",
       "icon": "ShieldCheck"

@@ -27,12 +27,14 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import {
+  Badge,
   Button,
   Checkbox,
   Dialog,
   Flex,
   IconButton,
   Select,
+  Text,
   TextField,
 } from "@radix-ui/themes";
 import { MenuIcon, MoreHorizontal, Pencil, Trash } from "lucide-react";
@@ -297,7 +299,12 @@ const Row = ({
           <MenuIcon size={isMobile ? 18 : 16} color={"var(--gray-8)"} />
         </div>
       </TableCell>
-      <TableCell>{task.name}</TableCell>
+      <TableCell>
+        <Flex align="center" gap="2" wrap="wrap">
+          <span>{task.name}</span>
+          {task.managed_by_tcp_task > 0 && <Badge color="green">TCP 综合任务</Badge>}
+        </Flex>
+      </TableCell>
       <TableCell>
         <Flex gap="2" align="center">
           {task.clients && task.clients.length > 0
@@ -318,18 +325,20 @@ const Row = ({
               {t("ping.default_on_short")}
             </span>
           )}
-          <NodeSelectorDialog
-            value={form.clients ?? []}
-            onChange={(uuids) => {
-              const nextForm = { ...form, clients: uuids };
-              setForm(nextForm);
-              submitEdit(nextForm);
-            }}
-          >
-            <IconButton variant="ghost">
-              <MoreHorizontal size="16" />
-            </IconButton>
-          </NodeSelectorDialog>
+          {!task.managed_by_tcp_task && (
+            <NodeSelectorDialog
+              value={form.clients ?? []}
+              onChange={(uuids) => {
+                const nextForm = { ...form, clients: uuids };
+                setForm(nextForm);
+                submitEdit(nextForm);
+              }}
+            >
+              <IconButton variant="ghost">
+                <MoreHorizontal size="16" />
+              </IconButton>
+            </NodeSelectorDialog>
+          )}
         </Flex>
       </TableCell>
       <TableCell>{task.target}</TableCell>
@@ -337,7 +346,7 @@ const Row = ({
       <TableCell>{task.interval}</TableCell>
       <TableCell className="flex items-center gap-2">
         {/* 编辑按钮 */}
-        <Dialog.Root open={editOpen} onOpenChange={setEditOpen}>
+        {!task.managed_by_tcp_task && <Dialog.Root open={editOpen} onOpenChange={setEditOpen}>
           <Dialog.Trigger>
             <IconButton variant="soft">
               <Pencil size="16" />
@@ -426,7 +435,7 @@ const Row = ({
               </Flex>
             </form>
           </Dialog.Content>
-        </Dialog.Root>
+        </Dialog.Root>}
         {/* 删除按钮 */}
         <Dialog.Root open={deleteOpen} onOpenChange={setDeleteOpen}>
           <Dialog.Trigger>
@@ -436,6 +445,11 @@ const Row = ({
           </Dialog.Trigger>
           <Dialog.Content>
             <Dialog.Title>{t("common.delete")}</Dialog.Title>
+            {task.managed_by_tcp_task > 0 && (
+              <Text as="p" size="2" color="red" mt="2">
+                这是 TCP 综合任务的基础 ICMP 检测。删除它会同时删除对应的 TCP 综合任务、历史运行和评分快照。
+              </Text>
+            )}
             <Flex gap="2" justify="end" className="mt-4">
               <Dialog.Close>
                 <Button
