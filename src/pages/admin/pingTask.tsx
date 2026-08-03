@@ -12,6 +12,7 @@ import {
 import {
   Box,
   Button,
+  Callout,
   Checkbox,
   Dialog,
   Flex,
@@ -19,6 +20,7 @@ import {
   Tabs,
   TextField,
 } from "@radix-ui/themes";
+import { Clock3 } from "lucide-react";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -53,6 +55,14 @@ const InnerLayout = () => {
         <label className="text-2xl font-bold">{t("ping.title")}</label>
         <AddButton />
       </div>
+      <Callout.Root color="green" variant="surface">
+        <Callout.Icon>
+          <Clock3 size={18} />
+        </Callout.Icon>
+        <Callout.Text>
+          可以直接使用 30、60 等常规整数间隔。系统会自动错峰下发，Agent 也会限制探测并发，无需手动填写 51、58、59 秒来避峰。
+        </Callout.Text>
+      </Callout.Root>
       <Tabs.Root defaultValue="task">
         <Tabs.List>
           <Tabs.Trigger value="task">{t("ping.task_view")}</Tabs.Trigger>

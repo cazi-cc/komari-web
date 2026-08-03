@@ -201,6 +201,15 @@ const UnlockQualityPageInner = () => {
         </Callout.Text>
       </Callout.Root>
 
+      <Callout.Root color="blue" variant="surface">
+        <Callout.Icon>
+          <Clock3 size={18} />
+        </Callout.Icon>
+        <Callout.Text>
+          60 秒等整数周期可正常使用。系统会自动错开任务，并与 TCP 质量检测共用单任务重负载通道。
+        </Callout.Text>
+      </Callout.Root>
+
       <Grid columns={{ initial: "1", sm: "3" }} gap="3">
         <ServiceCard name="ChatGPT" status="已启用" color="green" />
         <ServiceCard name="Netflix" status="预留，未检测" color="gray" />

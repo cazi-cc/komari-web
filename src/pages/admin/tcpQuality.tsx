@@ -294,6 +294,15 @@ const TCPQualityPageInner = () => {
         </Callout.Text>
       </Callout.Root>
 
+      <Callout.Root color="blue" variant="surface">
+        <Callout.Icon>
+          <Activity size={18} />
+        </Callout.Icon>
+        <Callout.Text>
+          相同检测周期的 TCP 任务会自动均匀错峰；每个 Agent 同时只运行一个 TCP 或解锁质量任务，避免瞬时抢占节点资源。
+        </Callout.Text>
+      </Callout.Root>
+
       <Grid columns={{ initial: "1", sm: "3" }} gap="3">
         <Card>
           <Flex align="center" gap="3">
