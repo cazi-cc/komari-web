@@ -21,7 +21,9 @@ import {
   Globe,
   Terminal,
   Database,
-  Store
+  Store,
+  ShieldCheck,
+  SlidersHorizontal,
 } from "lucide-react";
 
 
@@ -49,5 +51,7 @@ export const iconMap: Record<string, React.ComponentType<any>> = {
   Terminal,
   Database,
   Store,
+  ShieldCheck,
+  SlidersHorizontal,
 };
 

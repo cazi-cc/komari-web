@@ -131,6 +131,12 @@ export const routes: RouteObject[] = [
         path: "notification",
         children: [
           {
+            path: "channel",
+            element: React.createElement(
+              lazy(() => import("./pages/admin/settings/notification"))
+            ),
+          },
+          {
             path: "offline",
             element: React.createElement(
               lazy(() => import("./pages/admin/notification/offline"))
@@ -152,6 +158,18 @@ export const routes: RouteObject[] = [
             path: "traffic-report",
             element: React.createElement(
               lazy(() => import("./pages/admin/notification/traffic_report"))
+            ),
+          },
+          {
+            path: "visitor",
+            element: React.createElement(
+              lazy(() => import("./pages/admin/notification/visitor"))
+            ),
+          },
+          {
+            path: "unlock",
+            element: React.createElement(
+              lazy(() => import("./pages/admin/notification/unlock"))
             ),
           },
         ],

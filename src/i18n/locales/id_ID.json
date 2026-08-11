@@ -454,6 +454,12 @@
     "empty": "Tidak ada data server"
   },
   "notification": {
+    "overview": {
+      "title": "Ringkasan Notifikasi"
+    },
+    "unlock": {
+      "title": "Notifikasi Rute"
+    },
     "load": {
       "title": "Beban"
     },
@@ -469,6 +475,9 @@
       "title": "Mati"
     },
     "title": "Notifikasi",
+    "visitor": {
+      "title": "Notifikasi Pengunjung"
+    },
     "traffic_report": {
       "batch_edit": "Edit Massal",
       "daily": "Harian",

@@ -552,6 +552,12 @@
     "empty": "暂无服务器数据"
   },
   "notification": {
+    "overview": {
+      "title": "通知总览"
+    },
+    "unlock": {
+      "title": "线路通知"
+    },
     "load": {
       "title": "负载通知"
     },
@@ -567,6 +573,9 @@
       "title": "离线通知"
     },
     "title": "通知",
+    "visitor": {
+      "title": "访客通知"
+    },
     "traffic_report": {
       "batch_edit": "批量修改",
       "daily": "日报",

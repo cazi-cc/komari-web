@@ -26,11 +26,6 @@
           "icon": "CircleArrowRight"
         },
         {
-          "labelKey": "settings.notification.title",
-          "path": "/admin/settings/notification",
-          "icon": "MessageCircleMore"
-        },
-        {
           "labelKey": "settings.general.title",
           "path": "/admin/settings/general",
           "icon": "Ellipsis"
@@ -65,6 +60,16 @@
       "icon": "Bell",
       "children": [
         {
+          "labelKey": "settings.notification.method",
+          "path": "/admin/notification/channel",
+          "icon": "MessageCircleMore"
+        },
+        {
+          "labelKey": "notification.overview.title",
+          "path": "/admin/notification/general",
+          "icon": "SlidersHorizontal"
+        },
+        {
           "labelKey": "notification.offline.title",
           "path": "/admin/notification/offline",
           "icon": "Unplug"
@@ -80,9 +85,14 @@
           "icon": "BarChart2"
         },
         {
-          "labelKey": "settings.general.title",
-          "path": "/admin/notification/general",
-          "icon": "Ellipsis"
+          "labelKey": "notification.visitor.title",
+          "path": "/admin/notification/visitor",
+          "icon": "Users"
+        },
+        {
+          "labelKey": "notification.unlock.title",
+          "path": "/admin/notification/unlock",
+          "icon": "ShieldCheck"
         }
       ]
     },

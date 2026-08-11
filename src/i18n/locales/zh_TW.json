@@ -454,6 +454,12 @@
     "empty": "暫無伺服器資料"
   },
   "notification": {
+    "overview": {
+      "title": "通知總覽"
+    },
+    "unlock": {
+      "title": "線路通知"
+    },
     "load": {
       "title": "負載通知"
     },
@@ -469,6 +475,9 @@
       "title": "離線通知"
     },
     "title": "通知",
+    "visitor": {
+      "title": "訪客通知"
+    },
     "traffic_report": {
       "batch_edit": "批量修改",
       "daily": "日報",

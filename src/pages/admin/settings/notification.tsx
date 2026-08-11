@@ -12,8 +12,6 @@ import { toast } from "sonner";
 import Loading from "@/components/loading";
 import React from "react";
 import { renderProviderInputs } from "@/utils/renderProviders";
-import { SquareArrowOutUpRight } from "lucide-react";
-import { Link } from "react-router-dom";
 
 const NotificationSettings = () => {
   const { t } = useTranslation();
@@ -179,14 +177,6 @@ const NotificationSettings = () => {
       >
         GO
       </SettingCardButton>
-      <label className="text-muted-foreground text-sm flex flex-row items-center gap-1">
-        {t("settings.notification.moved")}
-        <Link
-          to="/admin/notification/general"
-        >
-          <SquareArrowOutUpRight size={16} />
-        </Link>
-      </label>
     </>
   );
 };

@@ -433,15 +433,6 @@ const UnlockQualityPageInner = () => {
                 </Field>
               )}
 
-              <ToggleRow
-                checked={form.notifications_enabled}
-                onCheckedChange={(notifications_enabled) =>
-                  setForm((current) => ({ ...current, notifications_enabled }))
-                }
-                title="Telegram 状态通知"
-                description="连续两轮完整校验异常才提醒，恢复后再发送一次。"
-              />
-
               <Callout.Root color="amber" variant="surface">
                 <Callout.Icon><FlaskConical size={18} /></Callout.Icon>
                 <Callout.Text>

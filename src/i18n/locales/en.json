@@ -454,6 +454,12 @@
     "empty": "No server data available"
   },
   "notification": {
+    "overview": {
+      "title": "Notification Overview"
+    },
+    "unlock": {
+      "title": "Route Notifications"
+    },
     "load": {
       "title": "Load"
     },
@@ -469,6 +475,9 @@
       "title": "Offline"
     },
     "title": "Notification",
+    "visitor": {
+      "title": "Visitor Notifications"
+    },
     "traffic_report": {
       "batch_edit": "Batch Edit",
       "daily": "Daily",
