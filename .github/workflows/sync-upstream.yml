@@ -76,6 +76,16 @@ jobs:
               echo "$conflict_files"
               echo '```'
               echo
+              echo "## Fork-owned files to preserve"
+              echo
+              echo '```text'
+              echo '.github/scripts/resolve-komari-release.cjs'
+              echo '.github/scripts/resolve-komari-release.test.cjs'
+              echo '.github/workflows/follow-komari-release.yaml'
+              echo '.github/workflows/release-automation-tests.yml'
+              echo '.github/workflows/sync-upstream.yml'
+              echo '```'
+              echo
               echo "Do not merge this report-only commit. Resolve the upstream merge on this branch, delete this file, run the repository tests, and then update the pull request."
             } > .github/UPSTREAM_SYNC_CONFLICTS.md
             git add .github/UPSTREAM_SYNC_CONFLICTS.md
@@ -144,6 +154,16 @@ jobs:
           - Build the web package.
           - Run the release resolver regression tests.
           - Review every fork-owned automation file listed below.
+
+          Fork-owned files to preserve:
+
+          ```text
+          .github/scripts/resolve-komari-release.cjs
+          .github/scripts/resolve-komari-release.test.cjs
+          .github/workflows/follow-komari-release.yaml
+          .github/workflows/release-automation-tests.yml
+          .github/workflows/sync-upstream.yml
+          ```
           EOF
           )"
           if [ -n "${PROTECTED_CHANGES}" ]; then
@@ -168,7 +188,7 @@ jobs:
         run: |
           set -euo pipefail
           title="chore: resolve komari-monitor/komari-web upstream conflicts"
-          body="The automated upstream merge found conflicts. This branch currently contains a conflict report only and must not be merged as-is. Resolve the merge on this branch, preserve the fork-owned release automation, delete the report, run all tests, and then update this pull request."
+          body="The automated upstream merge found conflicts. This branch currently contains a conflict report only and must not be merged as-is. Resolve the merge on this branch, review every fork-owned file listed in the report, delete the report, run all tests, and then update this pull request."
           if gh pr view "${SYNC_BRANCH}" --repo "${GITHUB_REPOSITORY}" --json number >/dev/null 2>&1; then
             gh pr edit "${SYNC_BRANCH}" --repo "${GITHUB_REPOSITORY}" --title "$title" --body "$body"
           else
