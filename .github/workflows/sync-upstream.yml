@@ -99,6 +99,13 @@ jobs:
             exit 0
           fi
 
+          protected_changes="$(git diff --name-only "origin/${BASE_BRANCH}..HEAD" -- \
+            .github/scripts/resolve-komari-release.cjs \
+            .github/scripts/resolve-komari-release.test.cjs \
+            .github/workflows/follow-komari-release.yaml \
+            .github/workflows/release-automation-tests.yml \
+            .github/workflows/sync-upstream.yml)"
+          node --test .github/scripts/resolve-komari-release.test.cjs
           npm ci
           npm run build
           git push --force-with-lease origin "${SYNC_BRANCH}"
@@ -106,15 +113,48 @@ jobs:
             echo "needed=true"
             echo "ready=true"
             echo "conflict=false"
+            echo "protected_changes<<EOF"
+            echo "$protected_changes"
+            echo "EOF"
           } >> "$GITHUB_OUTPUT"
+
+          if [ -n "$protected_changes" ]; then
+            {
+              echo "## Fork-owned release automation changed"
+              echo
+              echo '```text'
+              echo "$protected_changes"
+              echo '```'
+              echo
+              echo "Review these files manually and require the Test Release Automation check before merging."
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
 
       - name: Create or update the review pull request
         if: steps.sync.outputs.ready == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
+          PROTECTED_CHANGES: ${{ steps.sync.outputs.protected_changes }}
         run: |
           set -euo pipefail
-          body="Automated upstream merge. Review the fork-owned agent distribution and TCP quality administration before merging."
+          body="$(cat <<'EOF'
+          Automated upstream merge. Review the fork-owned agent distribution, TCP quality administration and release automation before merging.
+
+          Required checks:
+          - Build the web package.
+          - Run the release resolver regression tests.
+          - Review every fork-owned automation file listed below.
+          EOF
+          )"
+          if [ -n "${PROTECTED_CHANGES}" ]; then
+            body="${body}
+
+          Fork-owned automation changed:
+
+          \`\`\`text
+          ${PROTECTED_CHANGES}
+          \`\`\`"
+          fi
           if gh pr view "${SYNC_BRANCH}" --repo "${GITHUB_REPOSITORY}" --json number >/dev/null 2>&1; then
             gh pr edit "${SYNC_BRANCH}" --repo "${GITHUB_REPOSITORY}" --title "${PR_TITLE}" --body "$body"
           else
@@ -128,7 +168,7 @@ jobs:
         run: |
           set -euo pipefail
           title="chore: resolve komari-monitor/komari-web upstream conflicts"
-          body="The automated upstream merge found conflicts. This branch currently contains a conflict report only and must not be merged as-is. Resolve the merge on this branch, delete the report, run all tests, and then update this pull request."
+          body="The automated upstream merge found conflicts. This branch currently contains a conflict report only and must not be merged as-is. Resolve the merge on this branch, preserve the fork-owned release automation, delete the report, run all tests, and then update this pull request."
           if gh pr view "${SYNC_BRANCH}" --repo "${GITHUB_REPOSITORY}" --json number >/dev/null 2>&1; then
             gh pr edit "${SYNC_BRANCH}" --repo "${GITHUB_REPOSITORY}" --title "$title" --body "$body"
           else
