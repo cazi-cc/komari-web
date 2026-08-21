@@ -83,6 +83,7 @@ jobs:
               echo '.github/scripts/resolve-komari-release.test.cjs'
               echo '.github/workflows/follow-komari-release.yaml'
               echo '.github/workflows/release-automation-tests.yml'
+              echo 'src/pages/admin/unlockQuality.tsx'
               echo '.github/workflows/sync-upstream.yml'
               echo '```'
               echo
@@ -114,6 +115,7 @@ jobs:
             .github/scripts/resolve-komari-release.test.cjs \
             .github/workflows/follow-komari-release.yaml \
             .github/workflows/release-automation-tests.yml \
+            src/pages/admin/unlockQuality.tsx \
             .github/workflows/sync-upstream.yml)"
           node --test .github/scripts/resolve-komari-release.test.cjs
           npm ci
@@ -162,6 +164,7 @@ jobs:
           .github/scripts/resolve-komari-release.test.cjs
           .github/workflows/follow-komari-release.yaml
           .github/workflows/release-automation-tests.yml
+          src/pages/admin/unlockQuality.tsx
           .github/workflows/sync-upstream.yml
           ```
           EOF

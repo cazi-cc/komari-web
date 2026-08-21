@@ -46,6 +46,9 @@ interface UnlockQualityTask {
   control_dns: string;
   fixed_enabled: boolean;
   fixed_address: string;
+  relay_enabled: boolean;
+  relay_clients: string[];
+  relay_proxy_url: string;
   notifications_enabled: boolean;
 }
 
@@ -63,6 +66,9 @@ const emptyTask = (): UnlockQualityTask => ({
   control_dns: "1.1.1.1",
   fixed_enabled: false,
   fixed_address: "167.148.203.139",
+  relay_enabled: false,
+  relay_clients: [],
+  relay_proxy_url: "socks5://127.0.0.1:1080",
   notifications_enabled: true,
 });
 
@@ -115,6 +121,7 @@ const UnlockQualityPageInner = () => {
       ...emptyTask(),
       ...task,
       clients: [...(task.clients || [])],
+      relay_clients: [...(task.relay_clients || [])],
     });
     setFormOpen(true);
   };
@@ -127,6 +134,10 @@ const UnlockQualityPageInner = () => {
     }
     if (form.clients.length === 0) {
       toast.error("请至少选择一个执行节点");
+      return;
+    }
+    if (form.relay_enabled && form.relay_clients.length === 0) {
+      toast.error("启用中转监测后，请至少选择一个中转节点");
       return;
     }
     setSaving(true);
@@ -181,8 +192,8 @@ const UnlockQualityPageInner = () => {
             解锁线路质量
           </Text>
           <Text as="div" size="2" color="gray" mt="1">
-            使用节点真实系统 DNS 发起轻量 HTTPS 请求，持续检查 ChatGPT
-            访问质量。
+            比较节点系统线路与 HTTP、HTTPS 或 SOCKS5 中转访问 ChatGPT
+            的真实体验。
           </Text>
         </div>
         <Button onClick={openAdd}>
@@ -233,6 +244,7 @@ const UnlockQualityPageInner = () => {
                         {task.enabled ? "启用" : "暂停"}
                       </Badge>
                       <Badge color="blue">ChatGPT</Badge>
+                      {task.relay_enabled && <Badge color="purple">中转监测</Badge>}
                     </Flex>
                     <Text as="div" size="2" color="gray" mt="1">
                       {task.clients.length} 个节点 · 每 {task.interval} 秒 ·
@@ -292,6 +304,11 @@ const UnlockQualityPageInner = () => {
                   {task.fixed_enabled && (
                     <Badge color="amber" variant="soft">固定入口诊断已开启</Badge>
                   )}
+                  {task.relay_enabled && (
+                    <Badge color="purple" variant="soft">
+                      {task.relay_clients.length} 个中转节点
+                    </Badge>
+                  )}
                   {task.notifications_enabled && (
                     <Badge color="green" variant="soft">
                       <Bell size={13} /> 状态通知
@@ -328,7 +345,11 @@ const UnlockQualityPageInner = () => {
                     <NodeSelectorDialog
                       value={form.clients}
                       onChange={(clients) =>
-                        setForm((current) => ({ ...current, clients }))
+                        setForm((current) => ({
+                          ...current,
+                          clients,
+                          relay_clients: current.relay_clients.filter((uuid) => clients.includes(uuid)),
+                        }))
                       }
                     />
                     <Text size="2" color="gray">
@@ -433,10 +454,58 @@ const UnlockQualityPageInner = () => {
                 </Field>
               )}
 
+              <ToggleRow
+                checked={form.relay_enabled}
+                onCheckedChange={(relay_enabled) =>
+                  setForm((current) => ({
+                    ...current,
+                    relay_enabled,
+                    relay_clients: relay_enabled && current.relay_clients.length === 0
+                      ? [...current.clients]
+                      : current.relay_clients,
+                  }))
+                }
+                title="启用中转访问质量"
+                description="让指定节点通过本机或远程 HTTP/HTTPS/SOCKS5 代理访问 ChatGPT，并与系统线路对比。"
+              />
+              {form.relay_enabled && (
+                <Flex direction="column" gap="3">
+                  <Field label="使用中转的节点">
+                    <Flex align="center" gap="2">
+                      <NodeSelectorDialog
+                        value={form.relay_clients}
+                        onChange={(clients) =>
+                          setForm((current) => ({
+                            ...current,
+                            relay_clients: clients.filter((uuid) => current.clients.includes(uuid)),
+                          }))
+                        }
+                      />
+                      <Text size="2" color="gray">
+                        已选 {form.relay_clients.length}/{form.clients.length}
+                      </Text>
+                    </Flex>
+                  </Field>
+                  <Field label="中转代理地址（仅管理员和 Agent 可见）">
+                    <TextField.Root
+                      type="password"
+                      value={form.relay_proxy_url}
+                      placeholder="socks5://127.0.0.1:1080"
+                      onChange={(event) =>
+                        setForm((current) => ({ ...current, relay_proxy_url: event.target.value }))
+                      }
+                    />
+                    <Text size="1" color="gray">
+                      支持 socks5://、socks5h://、http://、https://，必须填写端口；需要认证时可使用 user:password@host:port。
+                    </Text>
+                  </Field>
+                </Flex>
+              )}
+
               <Callout.Root color="amber" variant="surface">
                 <Callout.Icon><FlaskConical size={18} /></Callout.Icon>
                 <Callout.Text>
-                  对照 DNS 和固定入口会增加请求量，只在排查 Smart DNS 效果时临时开启。
+                  中转监测每轮会增加一组轻量 HTTPS 请求。代理地址及认证信息不会进入访客接口、公开快照或主题页面。
                 </Callout.Text>
               </Callout.Root>
 
