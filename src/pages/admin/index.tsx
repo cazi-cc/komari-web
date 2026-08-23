@@ -2179,6 +2179,7 @@ function EditButton({ node }: { node: NodeDetail }) {
   const tagsRef = React.useRef<HTMLInputElement>(null);
   const publicRemarkRef = React.useRef<HTMLTextAreaElement>(null);
   const privateRemarkRef = React.useRef<HTMLTextAreaElement>(null);
+  const reachableAddressesRef = React.useRef<HTMLTextAreaElement>(null);
   const [hidden, setHidden] = useState(false);
   const [saving, setSaving] = useState(false);
   const [traffic_limit, setTrafficLimit] = useState(0);
@@ -2193,12 +2194,16 @@ function EditButton({ node }: { node: NodeDetail }) {
   const save = async () => {
     try {
       setSaving(true);
-      await fetch(`/api/admin/client/${node.uuid}/edit`, {
+      const response = await fetch(`/api/admin/client/${node.uuid}/edit`, {
         method: "POST",
         body: JSON.stringify({
           name: nameRef.current?.value,
           remark: privateRemarkRef.current?.value,
           public_remark: publicRemarkRef.current?.value,
+          reachable_addresses: (reachableAddressesRef.current?.value || "")
+            .split(/[\s,;]+/)
+            .map((value) => value.trim())
+            .filter(Boolean),
           group: groupRef.current?.value,
           tags: tagsRef.current?.value,
           hidden,
@@ -2209,11 +2214,20 @@ function EditButton({ node }: { node: NodeDetail }) {
           "Content-Type": "application/json",
         },
       });
+      if (!response.ok) {
+        const message = await response.text();
+        throw new Error(message || "保存失败");
+      }
       refresh();
       setOpen(false);
       toast.success(t("admin.nodeEdit.saveSuccess", "保存成功"));
     } catch (error) {
       console.error("Error updating client:", error);
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : t("admin.nodeEdit.saveError", "保存失败")
+      );
     } finally {
       setSaving(false);
     }
@@ -2298,6 +2312,26 @@ function EditButton({ node }: { node: NodeDetail }) {
               )}
               ref={publicRemarkRef}
             />
+          </div>
+          <div>
+            <label className="block mb-1 text-sm font-medium text-muted-foreground">
+              {t("admin.nodeEdit.reachableAddresses", "监测入口地址")}
+            </label>
+            <TextArea
+              defaultValue={(node.reachable_addresses || []).join("\n")}
+              ref={reachableAddressesRef}
+              resize={"vertical"}
+              placeholder={t(
+                "admin.nodeEdit.reachableAddressesPlaceholder",
+                "每行填写一个可被其他节点监测的 IPv4 或 IPv6 地址"
+              )}
+            />
+            <p className="mt-1 text-xs text-muted-foreground">
+              {t(
+                "admin.nodeEdit.reachableAddressesDescription",
+                "用于 NAT、独立入口或端口映射节点的线路关联；仅管理员可见，不替代 Agent 上报的出口地址。"
+              )}
+            </p>
           </div>
           <div>
             <SettingCardSwitch

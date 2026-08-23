@@ -8,7 +8,7 @@ import { DataTableRefreshContext } from "@/components/admin/NodeTable/schema/Dat
 import { Pencil } from "lucide-react";
 import { t } from "i18next";
 import { toast } from "sonner";
-import { Button, Dialog, Flex, IconButton, TextField } from "@radix-ui/themes";
+import { Button, Dialog, Flex, IconButton, TextArea, TextField } from "@radix-ui/themes";
 
 export function EditDialog({ item }: { item: z.infer<typeof schema> }) {
   const [form, setForm] = React.useState<ClientFormData & { weight: number }>({
@@ -16,10 +16,14 @@ export function EditDialog({ item }: { item: z.infer<typeof schema> }) {
     token: item.token || "", // 从 item 初始化 token
     remark: item.remark || "", // 从 item 初始化 remark
     public_remark: item.public_remark || "", // 从 item 初始化 public_remark
+    reachable_addresses: item.reachable_addresses || [],
     weight: item.weight || 0,
   });
   const [loading, setLoading] = React.useState(false);
   const [open, setOpen] = React.useState(false);
+  const [reachableAddressesText, setReachableAddressesText] = React.useState(
+    (item.reachable_addresses || []).join("\n")
+  );
 
   const refreshTable = React.useContext(DataTableRefreshContext);
 
@@ -66,6 +70,17 @@ export function EditDialog({ item }: { item: z.infer<typeof schema> }) {
               value={form.name}
               onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
               placeholder={t("admin.nodeEdit.namePlaceholder", "请输入名称")}
+              disabled={loading}
+            />
+          </div>
+          <div>
+            <label className="block mb-1 text-sm font-medium text-muted-foreground">
+              {t("admin.nodeEdit.reachableAddresses", "监测入口地址")}
+            </label>
+            <TextArea
+              value={reachableAddressesText}
+              onChange={(e) => setReachableAddressesText(e.target.value)}
+              placeholder="每行填写一个 IPv4 或 IPv6 地址"
               disabled={loading}
             />
           </div>
@@ -127,6 +142,10 @@ export function EditDialog({ item }: { item: z.infer<typeof schema> }) {
                 token: form.token,
                 remark: form.remark,
                 public_remark: form.public_remark,
+                reachable_addresses: reachableAddressesText
+                  .split(/[\s,;]+/)
+                  .map((value) => value.trim())
+                  .filter(Boolean),
               };
               saveClientData(item.uuid, payload, setLoading, () =>
                 setOpen(false)
