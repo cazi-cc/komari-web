@@ -75,6 +75,7 @@ interface TCPQualityTask {
   standard_packets: number;
   large_enabled: boolean;
   large_packets: number;
+  experimental_interval: number;
   delay_ms: number;
   timeout_ms: number;
 }
@@ -123,7 +124,8 @@ const emptyTask = (): TCPQualityTask => ({
   icmp_interval: 60,
   standard_packets: 30,
   large_enabled: false,
-  large_packets: 30,
+  large_packets: 12,
+  experimental_interval: 3600,
   delay_ms: 200,
   timeout_ms: 3000,
 });
@@ -212,10 +214,10 @@ const TCPQualityPageInner = () => {
       .map((task) => `${task.province_codes[0]}-${task.isp_codes[0]}-v${task.ip_versions[0]}`),
   );
   const selectedTargetCount = selectedTarget ? 1 : 0;
-  const estimatedPackets =
-    selectedTargetCount *
-    (form.standard_packets +
-      (form.large_enabled ? form.large_packets : 0));
+  const estimatedPackets = selectedTargetCount * form.standard_packets;
+  const estimatedExperimentalPackets = form.large_enabled
+    ? selectedTargetCount * form.large_packets * 3 + 5
+    : 0;
   const requiredInterval = minimumInterval(estimatedPackets);
 
   const openAdd = () => {
@@ -258,9 +260,11 @@ const TCPQualityPageInner = () => {
       toast.error("请选择一个当前可用的 TCP 节点目录目标");
       return;
     }
+    const interval = Math.max(form.interval, requiredInterval);
     const payload = {
       ...form,
-      interval: Math.max(form.interval, requiredInterval),
+      interval,
+      experimental_interval: Math.max(form.experimental_interval || 3600, interval),
     };
     setSaving(true);
     try {
@@ -525,10 +529,10 @@ const TCPQualityPageInner = () => {
         <Grid columns={{ initial: "1", lg: "2" }} gap="3">
           {tasks.map((task) => {
             const targets = 1;
-            const packets =
-              targets *
-              (task.standard_packets +
-                (task.large_enabled ? task.large_packets : 0));
+            const packets = targets * task.standard_packets;
+            const experimentalPackets = task.large_enabled
+              ? targets * task.large_packets * 3 + 5
+              : 0;
             return (
               <Card key={task.id}>
                 <Flex direction="column" gap="3">
@@ -540,12 +544,14 @@ const TCPQualityPageInner = () => {
                           {task.enabled ? "启用" : "暂停"}
                         </Badge>
                         {task.large_enabled && (
-                          <Badge color="amber">大小包实验</Badge>
+                          <Badge color="amber">SYN 载荷兼容性（实验）</Badge>
                         )}
                       </Flex>
                       <Text as="div" size="2" color="gray" mt="1">
-                        1 个目录目标 · 每节点约 {packets} 包 · 每{" "}
-                        {minutesLabel(task.interval)}
+                        标准 SYN：每 {minutesLabel(task.interval)} 约 {packets} 包
+                        {task.large_enabled
+                          ? `；实验：每 ${minutesLabel(task.experimental_interval || 3600)} 约 ${experimentalPackets} 包（含预检）`
+                          : "；实验已关闭"}
                       </Text>
                     </div>
                     <Flex gap="1">
@@ -740,7 +746,15 @@ const TCPQualityPageInner = () => {
                     <Text as="div" size="1" color="gray">{new Date(run.finished_at).toLocaleString()}</Text>
                     {run.results.map((result) => (
                       <Text key={`${result.target_key}-${result.mode}`} as="div" size="2" mt="2">
-                        {result.mode === "large" ? "大小包" : "标准 SYN"}：首次响应丢失 {(result.loss_ratio * 100).toFixed(1)}% · P50 {result.p50_latency_ms?.toFixed(1) || "--"} ms · P95 {result.p95_latency_ms?.toFixed(1) || "--"} ms
+                        {result.mode === "payload_300"
+                          ? "300 字节载荷 SYN"
+                          : result.mode === "payload_1050"
+                            ? "1050 字节载荷 SYN"
+                            : result.mode === "experimental_standard"
+                              ? "实验配对基准"
+                              : result.mode === "large"
+                                ? "旧版载荷实验"
+                                : "标准 SYN"}：首次响应丢失 {(result.loss_ratio * 100).toFixed(1)}% · P50 {result.p50_latency_ms?.toFixed(1) || "--"} ms · P95 {result.p95_latency_ms?.toFixed(1) || "--"} ms
                         {result.error_code ? ` · ${result.error_code}` : ""}
                       </Text>
                     ))}
@@ -799,8 +813,8 @@ const TCPQualityPageInner = () => {
             <ToggleRow
               checked={diagnosticLargeEnabled}
               onCheckedChange={setDiagnosticLargeEnabled}
-              title="同时检测实验性大小包"
-              description="默认关闭；开启后会额外发送大小 SYN 探测包。"
+              title="同时检测 SYN 载荷兼容性（实验）"
+              description="默认关闭；以无载荷、300 与 1050 字节三档配对检测，不等同于真实 TCP 重传。"
             />
             <Flex justify="end" gap="2">
               <Dialog.Close><Button variant="soft">取消</Button></Dialog.Close>
@@ -814,8 +828,7 @@ const TCPQualityPageInner = () => {
         <Dialog.Content maxWidth="760px" className="max-h-[88vh] overflow-y-auto">
           <Dialog.Title>{form.id ? "编辑 TCP 质量任务" : "新建 TCP 质量任务"}</Dialog.Title>
           <Dialog.Description>
-            “首次响应丢失率”对应 TcpQuality 所称的“重传率”，不是操作系统 TCP
-            栈统计的真实重传次数。
+            标准 SYN 用于综合评分；SYN 载荷兼容性只诊断特殊报文是否被中间设备区别处理，默认不参与综合分，也不等同于真实 TCP 重传。
           </Dialog.Description>
           <form onSubmit={save}>
             <Flex direction="column" gap="4" mt="4">
@@ -918,12 +931,12 @@ const TCPQualityPageInner = () => {
                 onCheckedChange={(large_enabled) =>
                   setForm((current) => ({ ...current, large_enabled }))
                 }
-                title="启用大小包实验"
-                description="使用 120–480B 与 900–1200B SYN 负载组合，只作为实验性辅助指标。"
+                title="启用 SYN 载荷兼容性（实验）"
+                description="每轮交错发送无载荷、300 与 1050 字节三档，先做公共目标预检；默认不参与综合评分。"
               />
               {form.large_enabled && (
                 <NumberField
-                  label="大小包实验数量"
+                  label="实验每档样本数"
                   value={form.large_packets}
                   min={10}
                   max={100}
@@ -933,7 +946,7 @@ const TCPQualityPageInner = () => {
                 />
               )}
 
-              <Grid columns={{ initial: "1", sm: "3" }} gap="3">
+              <Grid columns={{ initial: "1", sm: "4" }} gap="3">
                 <NumberField
                   label="ICMP 检测周期（秒）"
                   value={form.icmp_interval || 60}
@@ -952,10 +965,22 @@ const TCPQualityPageInner = () => {
                     setForm((current) => ({ ...current, interval: minutes * 60 }))
                   }
                 />
+                <NumberField
+                  label="实验检测周期（分钟）"
+                  value={Math.round((form.experimental_interval || 3600) / 60)}
+                  min={Math.max(15, Math.round(form.interval / 60))}
+                  max={1440}
+                  onChange={(minutes) =>
+                    setForm((current) => ({ ...current, experimental_interval: minutes * 60 }))
+                  }
+                />
                 <div className="rounded-md border p-3">
                   <Text as="div" size="2" weight="bold">TCP 资源估算</Text>
                   <Text as="div" size="2" color="gray" mt="1">
-                    单目标，每节点约 {estimatedPackets} 包；ICMP 每次仅发少量探测包。
+                    标准每轮约 {estimatedPackets} 包
+                    {form.large_enabled
+                      ? `；实验每轮约 ${estimatedExperimentalPackets} 包（含 5 个预检）`
+                      : "；实验已关闭"}。
                   </Text>
                   <Text as="div" size="2" color={form.interval < requiredInterval ? "red" : "green"}>
                     最低周期 {minutesLabel(requiredInterval)}
