@@ -6,8 +6,8 @@
     "open_source": "Komari 基于 MIT 协议开源，并使用了以下开源软件构建：",
     "open_source_title": "开源软件许可协议",
     "readme_open_in_new_tab": "在新标签页中打开",
-    "twemoji_notice": "代码采用 MIT，图像采用 CC-BY-4.0；图像未修改",
-    "title": "关于"
+    "title": "关于",
+    "twemoji_notice": "代码采用 MIT，图像采用 CC-BY-4.0；图像未修改"
   },
   "account": {
     "2fa_disabled": "双重身份验证已禁用",
@@ -34,35 +34,35 @@
     "title": "账户"
   },
   "account_settings": {
-    "bind_sso": "绑定外部账户",
-    "confirm_unbind": "确认解绑",
-    "looking_for_backup": "正在寻找备份？现已经迁移到设置-站点-备份。",
-    "sso_account": "外部账户",
-    "sso_account_bound": "{{name}}账户",
-    "sso_auth_failed": "处理SSO认证失败",
-    "sso_bound": "已绑定外部账户",
-    "sso_not_bound": "未绑定",
-    "unbind_sso": "解绑外部账户",
-    "unbind_sso_failed": "解绑失败",
-    "unbind_sso_success": "成功解绑",
-    "unbind_sso_warning": "确定要解绑 {{provider}} 账号吗？",
-    "upload_success": "上传成功",
     "bind_github": "绑定GitHub账户",
+    "bind_sso": "绑定外部账户",
     "cancel": "取消",
+    "confirm_unbind": "确认解绑",
     "download_backup": "下载服务器数据备份",
     "github_account": "GitHub账户",
     "github_auth_failed": "处理GitHub认证失败",
     "github_bound": "已绑定",
     "github_not_bound": "未绑定GitHub账户",
     "github_unbound": "未绑定",
+    "looking_for_backup": "正在寻找备份？现已经迁移到设置-站点-备份。",
+    "sso_account": "外部账户",
+    "sso_account_bound": "{{name}}账户",
+    "sso_auth_failed": "处理SSO认证失败",
+    "sso_bound": "已绑定外部账户",
+    "sso_not_bound": "未绑定",
     "sso_unbound": "未绑定",
     "unbind_github": "解绑GitHub账户",
     "unbind_github_failed": "解绑GitHub账户失败",
     "unbind_github_success": "已成功解绑GitHub账户",
     "unbind_github_warning": "解绑后，您将无法使用GitHub账户登录。确定要解绑吗？",
+    "unbind_sso": "解绑外部账户",
+    "unbind_sso_failed": "解绑失败",
+    "unbind_sso_success": "成功解绑",
+    "unbind_sso_warning": "确定要解绑 {{provider}} 账号吗？",
     "unknown_error": "未知错误",
     "upload_backup": "上传服务器数据备份",
-    "upload_failed": "上传失败，仅支持`.zip`格式"
+    "upload_failed": "上传失败，仅支持`.zip`格式",
+    "upload_success": "上传成功"
   },
   "admin": {
     "nodeDetail": {
@@ -122,7 +122,11 @@
       "billing": "账单",
       "billingCycle": "计费周期",
       "billingCycleTips": "<b>计费周期规则</b><br/> <br/> <b>按预设周期 (日历续费)</b><br/> 当输入的天数与预设方案（如月付、季付、年付）的数值相近时，将按对应的 <b>日历周期</b> 续费。<br/> - 常用数值: 30 (月), 92 (季), 365 (年), 730 (两年) 等。<br/> - 示例：输入 30，服务从3月15日续费，新的到期日为 4月15日。<br/> <br/> <b>按自定义天数</b><br/> 当输入其他天数时（如 7, 45, 100），将严格按 天数 续费。<br/> - 示例：输入 45，服务从3月15日续费，新的到期日为 4月29日 (45天后)。<br/> <br/> <b>一次性付费</b><br/> 输入 -1 表示一次性付费。",
+      "cancel": "取消",
       "cannotUndo": "这个操作将无法恢复！",
+      "clientVersion": "客户端版本",
+      "confirm": "确认",
+      "confirmDelete": "确认删除",
       "currency": "货币",
       "currencyTips": "¥-人民币，$-美元，€-欧元，£-英镑，₽-卢布，₣-法郎，₹-卢比，₫-越南盾，฿-泰铢",
       "customColumns": "自定义列",
@@ -154,6 +158,8 @@
       "installVersion": "指定安装版本",
       "interval": "采集间隔（秒）",
       "invalidPrice": "价格无效",
+      "ipAddress": "IP 地址",
+      "loading": "加载中...",
       "memoryModeAvailable": "包含缓冲区内存",
       "memoryModeAvailable_tip": "Agent 默认监测并上报已用内存，勾选此选项将上报已用内存+缓冲区内存。",
       "monthRotate": "网络统计月重置日",
@@ -162,6 +168,7 @@
       "namePlaceholder": "名称",
       "noData": "没有数据",
       "nodeList": "节点列表",
+      "noResults": "没有结果",
       "price": "价格",
       "priceTips": "0不显示，-1表示免费",
       "searchByName": "查找服务器",
@@ -169,14 +176,7 @@
       "serviceName_placeholder": "服务名称，为空则使用默认名称(komari-agent)",
       "setToLongTerm": "设置为长期",
       "submit": "提交",
-      "submitting": "等待",
-      "cancel": "取消",
-      "clientVersion": "客户端版本",
-      "confirm": "确认",
-      "confirmDelete": "确认删除",
-      "ipAddress": "IP 地址",
-      "loading": "加载中...",
-      "noResults": "没有结果"
+      "submitting": "等待"
     },
     "notification": {
       "expire_enable": "是否启用过期提醒",
@@ -204,6 +204,7 @@
     "site": "站点设置",
     "system": "系统设置"
   },
+  "cancel": "取消",
   "chart": {
     "addChart": "新增图表",
     "addMetric": "添加指标",
@@ -218,6 +219,7 @@
     "days": "{{count}} 天",
     "days_one": "{{count}} 天",
     "days_other": "{{count}} 天",
+    "disk_used": "磁盘",
     "downsampleAlgorithm": "降采样",
     "endTime": "结束时间",
     "fillEmpty": "补空值",
@@ -239,6 +241,7 @@
     "minutes": "{{count}} 分钟",
     "minutes_one": "{{count}} 分钟",
     "minutes_other": "{{count}} 分钟",
+    "network_down": "下载",
     "network_up": "上传",
     "process": "进程数",
     "query": "查询",
@@ -250,6 +253,7 @@
     "recentWeek": "最近 1 周",
     "removeMetric": "删除指标",
     "sampling": {
+      "average": "平均值",
       "first": "第一个值",
       "last": "最后一个值",
       "max": "最大值",
@@ -257,8 +261,7 @@
       "p70": "第 70 百分位",
       "p95": "第 95 百分位",
       "p99": "第 99 百分位",
-      "stddev": "标准差",
-      "average": "平均值"
+      "stddev": "标准差"
     },
     "samplingAlgorithm": "采样算法",
     "samplingAlgorithmTips": "<b>降采样说明</b><br/>查询历史时间范围时，后端会按照请求的时间间隔把数据点归入对齐后的固定时间桶，再用当前选择的算法为每个时间桶计算一个值。<br/><br/>平均值/最小值/最大值/第一个值/最后一个值/标准差和百分位都会在每个时间桶内部计算。空时间桶会保持为空，所以图表上的断点仍然表示该时间段没有数据。",
@@ -268,14 +271,13 @@
     "swap_used": "虚拟内存",
     "tcp_connections": "TCP",
     "total": "样本数量",
+    "type": "类型",
     "udp_connections": "UDP",
     "usage": "使用率",
     "valid": "有效样本",
-    "volatility": "波动",
-    "disk_used": "磁盘",
-    "network_down": "下载",
-    "type": "类型"
+    "volatility": "波动"
   },
+  "close": "关闭",
   "color": {
     "amber": "琥珀色",
     "blue": "蓝色",
@@ -303,6 +305,9 @@
     "tomato": "番茄红",
     "violet": "紫罗兰",
     "yellow": "黄色"
+  },
+  "command_clipboard": {
+    "title": "命令剪贴板"
   },
   "common": {
     "about": "关于",
@@ -398,6 +403,7 @@
     "updated_successfully": "成功更新",
     "weight": "权重"
   },
+  "copy": "复制",
   "copy_success": "已复制到剪贴板",
   "current_online": "当前在线",
   "current_time": "当前时间",
@@ -520,6 +526,7 @@
     "subtitle": "监控数据库暂时无法连接。请登录后更新连接串。",
     "title": "监控数据库恢复"
   },
+  "delete": "删除",
   "errorBoundary": {
     "go_to_home": "返回首页",
     "no_stack_trace": "无可用的栈跟踪。",
@@ -550,16 +557,16 @@
     "selectedNodes": "已选择节点",
     "selectNodes": "选择目标节点",
     "status": {
+      "failed": "失败",
       "polling": "正在获取最新执行状态...",
       "running": "正在运行",
-      "timeout": "超时",
-      "failed": "失败",
-      "success": "成功"
+      "success": "成功",
+      "timeout": "超时"
     },
     "stopPolling": "停止轮询",
+    "success": "命令执行完成",
     "taskStarted": "任务已启动",
-    "title": "远程执行",
-    "success": "命令执行完成"
+    "title": "远程执行"
   },
   "file_manager": {
     "action_failed": "文件操作失败",
@@ -673,12 +680,16 @@
     "uploading": "上传中"
   },
   "go_to_home": "回到主页",
+  "home_title": "Komari Monitor",
   "install": {
     "admin_title": "创建管理员账号",
+    "administrator": "管理员",
+    "appearance": "外观",
     "back": "上一步",
     "color": "色彩",
     "complete": "完成安装",
     "completed": "安装已完成，请返回登录。",
+    "confirm": "确认",
     "confirm_title": "确认安装设置",
     "connection_error": "无法连接服务器",
     "database": "数据库",
@@ -687,6 +698,7 @@
     "detected_database": "当前识别为 {{driver}}。",
     "dsn_required": "请输入监控数据库 DSN。",
     "failed": "安装失败，请稍后重试。",
+    "language": "语言",
     "next": "下一步",
     "password": "密码",
     "password_confirm": "确认密码",
@@ -717,16 +729,18 @@
     "title": "安装向导",
     "username": "用户名",
     "username_required": "请输入用户名。",
+    "welcome": "欢迎",
     "welcome_description": "配置管理员账号、站点元信息和监控数据库。",
     "welcome_subtitle": "轻量、开源的服务器监控工具。",
-    "welcome_title": "欢迎使用 Komari",
-    "administrator": "管理员",
-    "appearance": "外观",
-    "confirm": "确认",
-    "language": "语言",
-    "welcome": "欢迎"
+    "welcome_title": "欢迎使用 Komari"
   },
   "just_now": "刚刚",
+  "loadAlert": {
+    "metric": "监控项",
+    "ratio": "时间占比",
+    "threshold_placeholder": "百分比，例如80代表80%",
+    "title": "负载警报"
+  },
   "loading": "加载中...",
   "log": {
     "title": "日志"
@@ -760,6 +774,7 @@
     "no_sources": "尚未配置源",
     "no_themes": "未找到主题",
     "project_page": "项目主页",
+    "refresh": "刷新",
     "refresh_success": "主题源已刷新",
     "search_placeholder": "搜索主题、作者或来源",
     "source": "源",
@@ -768,13 +783,12 @@
     "source_name": "源名称",
     "source_updated": "源已更新",
     "themes": "主题市场",
+    "title": "市场",
     "uninstall": "卸载",
     "uninstall_confirm": "确定卸载 {{name}} 吗？",
     "uninstall_success": "主题已卸载",
-    "update_available": "有可用更新",
-    "refresh": "刷新",
-    "title": "市场",
-    "update": "更新"
+    "update": "更新",
+    "update_available": "有可用更新"
   },
   "metric_store_restructure": {
     "after": "重构后",
@@ -801,9 +815,12 @@
   },
   "network_speed": "网络速率",
   "nodeCard": {
+    "actions": "操作",
+    "arch": "架构",
     "basicInfo": "基本信息",
     "chart": "图表",
     "clickToViewPing": "点击查看延迟图表",
+    "cpu": "CPU",
     "disk": "磁盘",
     "groupNodes": "{{group}} 分组: 共 {{total}} 个服务器，{{online}} 个服务器在线",
     "kernelVersion": "内核版本",
@@ -819,9 +836,11 @@
     "online": "在线",
     "os": "操作系统",
     "ping": "延迟",
+    "price": "价格",
     "ram": "内存",
     "resourceUsage": "资源使用",
     "sortTooltip": "点击切换排序：正序 → 倒序 → 默认",
+    "status": "状态",
     "swap": "交换",
     "temperature": "温度",
     "time_day": "天",
@@ -833,12 +852,7 @@
     "totalTraffic": "总流量",
     "totalUpload": "总上传",
     "uptime": "运行时间",
-    "virtualization": "虚拟化",
-    "actions": "操作",
-    "arch": "架构",
-    "cpu": "CPU",
-    "price": "价格",
-    "status": "状态"
+    "virtualization": "虚拟化"
   },
   "nodes": {
     "empty": "暂无服务器数据"
@@ -850,7 +864,11 @@
     "general": {
       "title": "通用事件"
     },
+    "load": {
+      "title": "负载通知"
+    },
     "offline": {
+      "batch_edit": "批量修改",
       "cooldown": "冷静期",
       "full_title": "离线通知设置",
       "grace_period": "宽限期",
@@ -858,16 +876,12 @@
       "last_notified": "最后通知",
       "never_triggered": "从未触发",
       "tips": "为了避免频繁发送通知，我们设置了宽限期：</br> <b>宽限期</b>：客户端离线后，如果在这段时间内没有重新上线，就会发送离线通知",
-      "title": "离线通知",
-      "batch_edit": "批量修改"
-    },
-    "title": "通知",
-    "load": {
-      "title": "负载通知"
+      "title": "离线通知"
     },
     "overview": {
       "title": "通知总览"
     },
+    "title": "通知",
     "traffic_report": {
       "batch_edit": "批量修改",
       "daily": "日报",
@@ -1144,15 +1158,19 @@
     "websocket_error": "WebSocket 错误:",
     "websocket_not_connected": "WebSocket 未连接"
   },
+  "save": "保存",
   "search": {
     "no_results": "未找到匹配的服务器",
     "placeholder": "搜索节点名称、地区、系统...",
     "results": "找到 {{count}} 个服务器，共 {{total}} 个",
     "try_different": "尝试不同的搜索关键词"
   },
+  "select": "选择",
   "sessions": {
     "actions": "操作",
     "active_sessions": "活动会话",
+    "cancel": "取消",
+    "confirm_delete": "确认删除",
     "created_at": "创建时间",
     "current": "(当前)",
     "delete_all": "删除全部会话",
@@ -1165,12 +1183,10 @@
     "last_user_agent": "最后活动UA",
     "latest_ip": "最后活动IP",
     "latest_online": "最近在线",
+    "loading": "加载中...",
     "login_method": "登入方式",
     "session_id": "会话 ID",
-    "title": "会话管理",
-    "cancel": "取消",
-    "confirm_delete": "确认删除",
-    "loading": "加载中..."
+    "title": "会话管理"
   },
   "settings": {
     "api": {
@@ -1183,6 +1199,7 @@
       "body_description": "在页面底部添加自定义内容",
       "favicon": "自定义 Favicon",
       "favicon_change": "更新 Favicon",
+      "favicon_confirm": "确认",
       "favicon_current": "当前 Favicon",
       "favicon_default": "恢复默认",
       "favicon_default_description": "这将恢复默认的 Favicon 图标，是否继续？",
@@ -1193,8 +1210,7 @@
       "favicon_update_success": "已更新 Favicon",
       "header": "自定义头部",
       "header_description": "添加自定义 HTML/CSS/JavaScript 到站点头部，这些内容将会在所有页面加载",
-      "note": "个性化内容在使用自定义主题时可能会被覆盖。请确保代码的安全性，避免使用不受信任的内容。",
-      "favicon_confirm": "确认"
+      "note": "个性化内容在使用自定义主题时可能会被覆盖。请确保代码的安全性，避免使用不受信任的内容。"
     },
     "database": {
       "actions": {
@@ -1256,6 +1272,8 @@
       "canceling": "取消中...",
       "conns_invalid": "请输入有效的连接数",
       "current_status": "当前状态",
+      "downsampling_description": "启用后，原始采样保留 15 分钟，历史数据按 1 分钟、5 分钟和 1 小时分层聚合。关闭后不再生成降采样数据，原始采样按每个指标的保留天数清理；已清理的原始数据不会恢复。",
+      "downsampling_enabled": "启用",
       "downsampling_title": "数据降采样",
       "dsn_description": "当前运行的监控数据库连接串，系统会根据连接串自动识别数据库类型（SQLite / MariaDB / MySQL / PostgreSQL）。SQLite：./data/metrics.db；MariaDB / MySQL：user:password@tcp(host:3306)/metrics?charset=utf8mb4&parseTime=True；PostgreSQL：host=localhost user=komari password=secret dbname=metrics port=5432 sslmode=disable",
       "dsn_title": "连接串（DSN）",
@@ -1264,12 +1282,17 @@
       "hours_unit": "小时",
       "intro": "在此配置监控数据库，以及每个监控指标的原始数据保留策略。",
       "loading_metrics": "正在加载指标...",
+      "low_resource_description": "开启后，Komari 将降低数据的采样频率，节省资源占用。",
+      "low_resource_enabled": "启用",
+      "low_resource_title": "低资源模式",
       "max_idle_conns_description": "数据库最大空闲连接数，默认 5",
       "max_idle_conns_title": "最大空闲连接数",
       "max_open_conns_description": "数据库最大连接数，默认 25",
       "max_open_conns_title": "最大连接数",
+      "metric_description": "描述",
       "metric_key": "指标 Key",
       "metric_name": "指标名称",
+      "metric_type": "类型",
       "metric_unit": "单位",
       "migrated_points": "已搬运采样点",
       "migration_cancel_failed": "取消迁移失败",
@@ -1453,14 +1476,7 @@
       },
       "table_prefix_description": "监控表名前缀，默认 metric_",
       "table_prefix_title": "表名前缀",
-      "title": "监控数据库",
-      "downsampling_description": "启用后，原始采样保留 15 分钟，历史数据按 1 分钟、5 分钟和 1 小时分层聚合。关闭后不再生成降采样数据，原始采样按每个指标的保留天数清理；已清理的原始数据不会恢复。",
-      "downsampling_enabled": "启用",
-      "low_resource_description": "开启后，Komari 将降低数据的采样频率，节省资源占用。",
-      "low_resource_enabled": "启用",
-      "low_resource_title": "低资源模式",
-      "metric_description": "描述",
-      "metric_type": "类型"
+      "title": "监控数据库"
     },
     "missing_required_fields": "请填写必填字段: {{fieldNames}}",
     "notification": {
@@ -1487,18 +1503,6 @@
       "provider_fields": "发送设置",
       "provider_fields_description": "详细设置您选择的信息发送渠道",
       "provider_settings_fetch_failed": "加载通知设置失败",
-      "telegram": {
-        "bot_token": "Telegram Bot Token",
-        "chat_id": "Chat ID",
-        "endpoint": "请求端点",
-        "endpoint_help": "Telegram Bot API 的请求端点，通常为 `https://api.telegram.org/bot`"
-      },
-      "template": "消息通知模板",
-      "template_description": "Komari 将按照消息通知模板发送通知",
-      "test_description": "发送测试消息",
-      "test_title": "发送测试消息",
-      "title": "通知",
-      "unavailable": "不可用",
       "smtp_description": "配置 SMTP 邮箱信息以发送邮件通知。",
       "smtp_host": "SMTP 服务器",
       "smtp_password": "密码",
@@ -1509,11 +1513,23 @@
       "smtp_tips": "请先测试运行 Komari 的服务器 IP 是否能发送邮件，可使用 \"{{command}}\" 进行测试。",
       "smtp_title": "SMTP 配置",
       "smtp_username": "用户名",
+      "telegram": {
+        "bot_token": "Telegram Bot Token",
+        "chat_id": "Chat ID",
+        "endpoint": "请求端点",
+        "endpoint_help": "Telegram Bot API 的请求端点，通常为 `https://api.telegram.org/bot`"
+      },
       "telegram_bot_token": "Telegram 机器人令牌",
       "telegram_chat_id_error": "Chat ID 不可为空",
       "telegram_description": "配置您的 Telegram 机器人以在聊天中直接接收提醒。",
       "telegram_endpoint": "请求端点",
-      "telegram_title": "Telegram 配置"
+      "telegram_title": "Telegram 配置",
+      "template": "消息通知模板",
+      "template_description": "Komari 将按照消息通知模板发送通知",
+      "test_description": "发送测试消息",
+      "test_title": "发送测试消息",
+      "title": "通知",
+      "unavailable": "不可用"
     },
     "settings_save_failed": "保存设置失败",
     "settings_saved": "设置已保存",
@@ -1529,6 +1545,7 @@
       "backup_restore_description": "从文件恢复备份，将覆盖当前数据。",
       "backup_restore_error": "恢复备份失败",
       "cors_allowed_origins": "API CORS 允许列表",
+      "cors_allowed_origins_description": "每行或用逗号分隔一个 Origin，例如 https://example.com",
       "cors_origin_check_enabled": "CORS 跨域请求校验",
       "cors_origin_check_enabled_description": "开启后 API 请求只允许同源或允许列表中的地址",
       "custom": "自定义",
@@ -1550,21 +1567,22 @@
       "temporary_share_description": "开启私有站点后，可以通过临时分享链接访问站点。",
       "temporary_share_hours": "分享时长（小时）",
       "temporary_share_revoke": "撤销访问许可",
-      "title": "站点",
-      "ws_allowed_origins": "WebSocket Origin 允许列表",
-      "ws_origin_check_enabled": "WebSocket Origin 校验",
-      "ws_origin_check_enabled_description": "开启后 WebSocket 请求只允许同源或允许列表中的 Origin",
-      "cors_allowed_origins_description": "每行或用逗号分隔一个 Origin，例如 https://example.com",
       "tempory_share": "临时分享",
       "tempory_share_current_link": "当前临时访问链接",
       "tempory_share_description": "开启私有站点后，可以通过临时分享链接访问站点。",
       "tempory_share_hours": "分享时长（小时）",
       "tempory_share_revoke": "撤销访问许可",
-      "ws_allowed_origins_description": "每行或用逗号分隔一个 Origin，例如 https://example.com"
+      "title": "站点",
+      "ws_allowed_origins": "WebSocket Origin 允许列表",
+      "ws_allowed_origins_description": "每行或用逗号分隔一个 Origin，例如 https://example.com",
+      "ws_origin_check_enabled": "WebSocket Origin 校验",
+      "ws_origin_check_enabled_description": "开启后 WebSocket 请求只允许同源或允许列表中的 Origin"
     },
     "sso": {
       "callback_url_tips": "回调地址：{{url}}",
+      "client_id": "客户端 ID",
       "client_id_description": "OAuth 应用的客户端 ID",
+      "client_secret": "客户端密钥",
       "client_secret_description": "OAuth 应用的客户端密钥",
       "enable": "启用单点登录",
       "enable_description": "允许用户通过第三方账户（如 GitHub）登录",
@@ -1589,9 +1607,7 @@
       "provider_fields_description": "设置您选择登录方式的详细信息",
       "provider_save_failed": "保存登录提供商设置失败",
       "provider_settings_fetch_failed": "加载登录提供商设置失败",
-      "title": "单点登录",
-      "client_id": "客户端 ID",
-      "client_secret": "客户端密钥"
+      "title": "单点登录"
     },
     "title": "设置",
     "update_1_2_7": {
@@ -1667,6 +1683,9 @@
   "system": {
     "title": "系统"
   },
+  "tcp_quality": {
+    "title": "TCP 连接质量"
+  },
   "terminal": {
     "2fa_code_prompt": "请输入 2FA 验证码: ",
     "2fa_prompt": "需要双因素认证。",
@@ -1732,6 +1751,7 @@
     "delete_failed": "主题删除失败",
     "delete_success": "主题删除成功",
     "delete_warning": "您确定要删除主题 \"{{themeName}}\" 吗？此操作不可撤销。",
+    "description": "描述",
     "drag_drop": "拖拽文件到此处",
     "find_more": "查找更多主题？",
     "github_description": "系统将从该GitHub仓库下载最新的发布版本。",
@@ -1750,6 +1770,7 @@
     "invalid_file_type": "无效的文件类型，仅支持 .zip 格式",
     "light": "浅色",
     "load_config_failed": "加载主题配置失败",
+    "manage": "主题管理",
     "manage_with_name": "{{name}} 主题管理",
     "menu": "主题",
     "name": "名称",
@@ -1772,20 +1793,18 @@
     "update_mode_github": "GitHub发布",
     "update_mode_url": "直接URL",
     "update_success": "主题更新成功",
+    "update_theme": "更新主题",
     "upload": "上传主题",
     "upload_413_content_too_large": "文件上传失败 (413)。请检查并增大您的反向代理服务器（如 Nginx/CDN）配置中的文件大小限制（client_max_body_size），确保该值大于您的目标文件大小。",
     "upload_description": "上传一个 .zip 格式的主题文件",
     "upload_failed": "主题上传失败",
     "upload_first_theme": "上传您的第一个主题",
     "upload_success": "主题上传成功",
-    "uploading": "正在上传主题...",
-    "version": "版本",
-    "zip_files_only": "仅支持 .zip 格式",
-    "description": "描述",
-    "manage": "主题管理",
-    "update_theme": "更新主题",
     "upload_theme": "上传主题",
-    "uploda_413_content_too_large": "文件上传失败 (413)。请检查并增大您的反向代理服务器（如 Nginx/CDN）配置中的文件大小限制（client_max_body_size），确保该值大于您的目标文件大小。"
+    "uploading": "正在上传主题...",
+    "uploda_413_content_too_large": "文件上传失败 (413)。请检查并增大您的反向代理服务器（如 Nginx/CDN）配置中的文件大小限制（client_max_body_size），确保该值大于您的目标文件大小。",
+    "version": "版本",
+    "zip_files_only": "仅支持 .zip 格式"
   },
   "time": {
     "ago": "前",
@@ -1793,6 +1812,9 @@
     "second": "秒"
   },
   "traffic_overview": "流量概览",
+  "unlock_quality": {
+    "title": "解锁线路质量"
+  },
   "userAgent": {
     "android": "安卓",
     "chrome": "Chrome",
@@ -1808,27 +1830,5 @@
     "mode": "显示模式"
   },
   "warn_https": "当前连接不是 HTTPS！您的敏感数据存在严重风险。请立即采取措施确保连接安全！复制操作可能无法使用！",
-  "warn_websocket": "RPC2 请求失败，请检查网络连接或服务器状态！",
-  "cancel": "取消",
-  "close": "关闭",
-  "command_clipboard": {
-    "title": "命令剪贴板"
-  },
-  "copy": "复制",
-  "delete": "删除",
-  "home_title": "Komari Monitor",
-  "loadAlert": {
-    "metric": "监控项",
-    "ratio": "时间占比",
-    "threshold_placeholder": "百分比，例如80代表80%",
-    "title": "负载警报"
-  },
-  "save": "保存",
-  "select": "选择",
-  "tcp_quality": {
-    "title": "TCP 连接质量"
-  },
-  "unlock_quality": {
-    "title": "解锁线路质量"
-  }
+  "warn_websocket": "RPC2 请求失败，请检查网络连接或服务器状态！"
 }
