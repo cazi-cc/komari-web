@@ -1,0 +1,51 @@
+{
+  "upstream_repository": "komari-monitor/komari-web",
+  "upstream_branch": "radix",
+  "base_branch": "radix",
+  "sync_branch": "sync/upstream-radix",
+  "required_paths": [
+    "src/pages/admin/unlockQuality.tsx",
+    "src/pages/admin/tcpQuality.tsx",
+    "src/lib/agentDistribution.ts",
+    ".github/scripts/resolve-komari-release.cjs",
+    "src/pages/admin/notification/traffic_report.tsx"
+  ],
+  "validation_commands": [
+    [
+      "python3",
+      ".github/scripts/test_sync_upstream.py",
+      "-v"
+    ],
+    [
+      "node",
+      "--test",
+      ".github/scripts/resolve-komari-release.test.cjs"
+    ],
+    [
+      "npm",
+      "ci"
+    ],
+    [
+      "npm",
+      "run",
+      "check:agent-distribution"
+    ],
+    [
+      "npm",
+      "run",
+      "build"
+    ]
+  ],
+  "protected_paths": [
+    ".github/scripts/resolve-komari-release.cjs",
+    ".github/scripts/sync_upstream.py",
+    ".github/scripts/test_sync_upstream.py",
+    ".github/upstream-sync.json",
+    ".github/workflows/follow-komari-release.yaml",
+    ".github/workflows/sync-upstream.yml",
+    "src/lib/agentDistribution.ts",
+    "src/pages/admin/notification/traffic_report.tsx",
+    "src/pages/admin/tcpQuality.tsx",
+    "src/pages/admin/unlockQuality.tsx"
+  ]
+}

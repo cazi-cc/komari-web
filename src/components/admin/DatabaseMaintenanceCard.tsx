@@ -1,3 +1,4 @@
+import Loading from "@/components/loading";
 import { formatBytes } from "@/utils/unitHelper";
 import { Button, Dialog, Flex, Text } from "@radix-ui/themes";
 import { DatabaseZap, RefreshCw } from "lucide-react";
@@ -275,6 +276,7 @@ export function DatabaseMaintenanceCard() {
     <SettingCard
       title={t("settings.database.maintenance_title")}
       description={t("settings.database.maintenance_description")}
+      className="km-admin-db-maintenance-card"
     >
       <Flex direction="column" className="w-full pt-2" gap="0">
         {overview ? (
@@ -292,9 +294,7 @@ export function DatabaseMaintenanceCard() {
             ) : null}
           </>
         ) : loading ? (
-          <Text size="2" color="gray" className="py-3">
-            {t("loading")}
-          </Text>
+          <Loading compact />
         ) : null}
 
         {loadError ? (

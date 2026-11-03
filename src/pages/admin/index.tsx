@@ -91,6 +91,7 @@ import {
   useAgentDistribution,
   withRequiredAgentArgs,
 } from "@/lib/agentDistribution";
+import { useRPC2Call } from "@/contexts/RPC2Context";
 
 
 const NodeDetailsPage = () => {
@@ -119,13 +120,13 @@ const Layout = () => {
     return () => clearInterval(interval);
   }, [nodeDetail]);
 
-  if (isLoading) return <Loading text="" />;
+  if (isLoading) return <Loading />;
   if (error) return <div>{error}</div>;
 
   const isEmpty = Array.isArray(nodeDetail) && nodeDetail.length === 0;
 
   return (
-    <Flex direction="column" gap="4" p="4">
+    <Flex direction="column" gap="4" p="4" className="km-page-admin-index">
       <Header
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
@@ -196,7 +197,34 @@ type AutoDiscoveryInstallOptions = {
   includeMountpoints: string;
   interval: string;
   monthRotate: string;
+  installVersion: string;
 };
+
+function useIsSnapshotBackend() {
+  const { call } = useRPC2Call();
+  const [isSnapshotBackend, setIsSnapshotBackend] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    call<unknown, { version?: string }>("common:getVersion")
+      .then((info) => {
+        if (!cancelled) {
+          const version = info?.version?.trim().toLowerCase() || "";
+          setIsSnapshotBackend(version.startsWith("snapshot"));
+        }
+      })
+      .catch((error) => {
+        console.error("Failed to fetch backend version:", error);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [call]);
+
+  return isSnapshotBackend;
+}
 
 const AutoDiscoverySection = ({
   settings,
@@ -229,6 +257,7 @@ const AutoDiscoverySection = ({
       includeMountpoints: "",
       interval: "5",
       monthRotate: "",
+      installVersion: "",
     });
 
   const [enableGhproxy, setEnableGhproxy] = React.useState(false);
@@ -241,6 +270,20 @@ const AutoDiscoverySection = ({
     React.useState(false);
   const [enableInterval, setEnableInterval] = React.useState(true);
   const [enableMonthRotate, setEnableMonthRotate] = React.useState(false);
+  const [enableInstallVersion, setEnableInstallVersion] = React.useState(false);
+  const isSnapshotBackend = useIsSnapshotBackend();
+
+  React.useEffect(() => {
+    if (!showOptions || !isSnapshotBackend) {
+      return;
+    }
+
+    setEnableInstallVersion(true);
+    setInstallOptions((prev) => ({
+      ...prev,
+      installVersion: prev.installVersion.trim() || "snapshot",
+    }));
+  }, [showOptions, isSnapshotBackend]);
 
   const generateCommand = () => {
     const host = (function () {
@@ -289,6 +332,11 @@ const AutoDiscoverySection = ({
     if (enableCustomServiceName && serviceName) {
       args.push(`--install-service-name`);
       args.push(serviceName);
+    }
+    const installVersion = installOptions.installVersion.trim();
+    if (enableInstallVersion && installVersion) {
+      args.push(`--install-version`);
+      args.push(installVersion);
     }
     const includeNics = installOptions.includeNics.trim();
     if (enableIncludeNics && includeNics) {
@@ -364,6 +412,7 @@ const AutoDiscoverySection = ({
           "--install-ghproxy",
           "--install-dir",
           "--install-service-name",
+          "--install-version",
         ];
         const dockerArgs: string[] = [];
         for (let i = 0; i < args.length; i++) {
@@ -400,7 +449,7 @@ const AutoDiscoverySection = ({
   if (loading) {
     return (
       <Flex align="center" justify="center" mt="4" py="4">
-        <Loading text="" />
+        <Loading />
       </Flex>
     );
   }
@@ -618,6 +667,48 @@ const AutoDiscoverySection = ({
           </div>
 
           <Flex direction="column" gap="2">
+            <Flex gap="2" align="center">
+              <Checkbox
+                checked={enableInstallVersion}
+                onCheckedChange={(checked) => {
+                  setEnableInstallVersion(Boolean(checked));
+                  if (!checked) {
+                    setInstallOptions((prev) => ({
+                      ...prev,
+                      installVersion: "",
+                    }));
+                  }
+                }}
+              />
+              <label
+                className="text-sm font-bold cursor-pointer"
+                onClick={() => {
+                  const willEnable = !enableInstallVersion;
+                  setEnableInstallVersion(willEnable);
+                  if (!willEnable) {
+                    setInstallOptions((prev) => ({
+                      ...prev,
+                      installVersion: "",
+                    }));
+                  }
+                }}
+              >
+                {t("admin.nodeTable.installVersion", "指定安装版本")}
+              </label>
+            </Flex>
+            {enableInstallVersion && (
+              <TextField.Root
+                placeholder="snapshot"
+                value={installOptions.installVersion}
+                onChange={(e) =>
+                  setInstallOptions((prev) => ({
+                    ...prev,
+                    installVersion: e.target.value,
+                  }))
+                }
+              />
+            )}
+
             <Flex gap="2" align="center">
               <Checkbox
                 checked={enableGhproxy}
@@ -959,7 +1050,7 @@ const AutoDiscoverySection = ({
         onClick={() => copyToClipboard(generateCommand())}
       >
         <Copy size={16} />
-        {t("copy")}
+        {t("common.copy")}
       </Button>
     </Flex>
   );
@@ -1022,7 +1113,7 @@ const Header = ({
         />
         <Dialog.Root open={dialogOpen} onOpenChange={setDialogOpen}>
           <Dialog.Trigger>
-            <Button onClick={() => setDialogOpen(true)}>
+            <Button data-guide="add-node" onClick={() => setDialogOpen(true)}>
               <Plus size={16} />
               {t("admin.nodeTable.addNode")}
             </Button>
@@ -1056,12 +1147,14 @@ const SortableRow = ({
   node,
   selectedNodes,
   handleSelectNode,
-  settings
+  settings,
+  isSnapshotBackend,
 }: {
   node: NodeDetail;
   selectedNodes: string[];
   handleSelectNode: (uuid: string, checked: boolean) => void;
   settings: any;
+  isSnapshotBackend: boolean;
 }) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: node.uuid });
@@ -1183,7 +1276,11 @@ const SortableRow = ({
         />
       </TableCell>
       <TableCell>
-        <ActionButtons node={node} settings={settings} />
+        <ActionButtons
+          node={node}
+          settings={settings}
+          isSnapshotBackend={isSnapshotBackend}
+        />
       </TableCell>
     </TableRow>
   );
@@ -1220,6 +1317,7 @@ const NodeTable = ({
   // 添加 localNodes 状态，实现即时 UI 更新
   const [localNodes, setLocalNodes] = useState<NodeDetail[]>(nodes);
   const [isDragging, setIsDragging] = useState(false);
+  const isSnapshotBackend = useIsSnapshotBackend();
   React.useEffect(() => {
     setLocalNodes(nodes);
   }, [nodes]);
@@ -1303,8 +1401,8 @@ const NodeTable = ({
                 />
               </TableHead>
               <TableHead>{t("admin.nodeTable.name")}</TableHead>
-              <TableHead>{t("admin.nodeTable.ipAddress")}</TableHead>
-              <TableHead>{t("admin.nodeTable.clientVersion")}</TableHead>
+              <TableHead>{t("admin.nodeDetail.ipAddress")}</TableHead>
+              <TableHead>{t("admin.nodeDetail.clientVersion")}</TableHead>
               <TableHead>{t("common.group")}</TableHead>
               <TableHead>{t("admin.nodeEdit.remark")}</TableHead>
               <TableHead>{t("admin.nodeTable.billing")}</TableHead>
@@ -1323,6 +1421,7 @@ const NodeTable = ({
                   selectedNodes={selectedNodes}
                   handleSelectNode={handleSelectNode}
                   settings={settings}
+                  isSnapshotBackend={isSnapshotBackend}
                 />
               ))}
             </SortableContext>
@@ -1334,11 +1433,23 @@ const NodeTable = ({
 };
 
 type Platform = "linux" | "windows" | "macos" | "docker";
-const ActionButtons = ({ node, settings }: { node: NodeDetail, settings: any }) => {
+const ActionButtons = ({
+  node,
+  settings,
+  isSnapshotBackend,
+}: {
+  node: NodeDetail;
+  settings: any;
+  isSnapshotBackend: boolean;
+}) => {
   const { t } = useTranslation();
   return (
     <div className="flex items-center gap-4">
-      <GenerateCommandButton node={node} settings={settings} />
+      <GenerateCommandButton
+        node={node}
+        settings={settings}
+        isSnapshotBackend={isSnapshotBackend}
+      />
       <IconButton
         title={t("terminal.title")}
         variant="ghost"
@@ -1381,21 +1492,21 @@ function DeleteButton({ node }: { node: NodeDetail }) {
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger>
-        <IconButton variant="ghost" color="red" title={t("delete")}>
+        <IconButton variant="ghost" color="red" title={t("common.delete")}>
           <Trash2Icon size="18" />
         </IconButton>
       </Dialog.Trigger>
       <Dialog.Content>
-        <Dialog.Title>{t("delete")}</Dialog.Title>
+        <Dialog.Title>{t("common.delete")}</Dialog.Title>
         <Dialog.Description>
-          {t("admin.nodeTable.confirmDelete")}
+          {t("common.confirm_delete")}
         </Dialog.Description>
         <Flex justify="end" gap="2" mt="4">
           <Dialog.Trigger>
-            <Button variant="soft">{t("admin.nodeTable.cancel")}</Button>
+            <Button variant="soft">{t("common.cancel")}</Button>
           </Dialog.Trigger>
           <Button disabled={deleting} color="red" onClick={handleDelete}>
-            {t("admin.nodeTable.confirmDelete")}
+            {t("common.confirm_delete")}
           </Button>
         </Flex>
       </Dialog.Content>
@@ -1417,8 +1528,17 @@ type InstallOptions = {
   includeMountpoints: string;
   interval: string;
   monthRotate: string;
+  installVersion: string;
 };
-function GenerateCommandButton({ node, settings }: { node: NodeDetail, settings: any }) {
+function GenerateCommandButton({
+  node,
+  settings,
+  isSnapshotBackend,
+}: {
+  node: NodeDetail;
+  settings: any;
+  isSnapshotBackend: boolean;
+}) {
   const agentDistribution = useAgentDistribution();
   const [selectedPlatform, setSelectedPlatform] =
     React.useState<Platform>("linux");
@@ -1437,6 +1557,7 @@ function GenerateCommandButton({ node, settings }: { node: NodeDetail, settings:
     includeMountpoints: "",
     interval: "5",
     monthRotate: "",
+    installVersion: "",
   });
 
   const [enableGhproxy, setEnableGhproxy] = React.useState(false);
@@ -1449,6 +1570,19 @@ function GenerateCommandButton({ node, settings }: { node: NodeDetail, settings:
     React.useState(false);
   const [enableInterval, setEnableInterval] = React.useState(true);
   const [enableMonthRotate, setEnableMonthRotate] = React.useState(false);
+  const [enableInstallVersion, setEnableInstallVersion] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!isSnapshotBackend) {
+      return;
+    }
+
+    setEnableInstallVersion(true);
+    setInstallOptions((prev) => ({
+      ...prev,
+      installVersion: prev.installVersion.trim() || "snapshot",
+    }));
+  }, [isSnapshotBackend]);
 
   const generateCommand = () => {
     const host = function () {
@@ -1498,6 +1632,11 @@ function GenerateCommandButton({ node, settings }: { node: NodeDetail, settings:
     if (enableCustomServiceName && serviceName) {
       args.push(`--install-service-name`);
       args.push(serviceName);
+    }
+    const installVersion = installOptions.installVersion.trim();
+    if (enableInstallVersion && installVersion) {
+      args.push(`--install-version`);
+      args.push(installVersion);
     }
     const includeNics = installOptions.includeNics.trim();
     if (enableIncludeNics && includeNics) {
@@ -1572,6 +1711,7 @@ function GenerateCommandButton({ node, settings }: { node: NodeDetail, settings:
           "--install-ghproxy",
           "--install-dir",
           "--install-service-name",
+          "--install-version",
         ];
         const dockerArgs: string[] = [];
         for (let i = 0; i < args.length; i++) {
@@ -1766,6 +1906,48 @@ function GenerateCommandButton({ node, settings }: { node: NodeDetail, settings:
               </Flex>
             </div>
             <Flex direction="column" gap="2">
+              <Flex gap="2" align="center">
+                <Checkbox
+                  checked={enableInstallVersion}
+                  onCheckedChange={(checked) => {
+                    setEnableInstallVersion(Boolean(checked));
+                    if (!checked) {
+                      setInstallOptions((prev) => ({
+                        ...prev,
+                        installVersion: "",
+                      }));
+                    }
+                  }}
+                />
+                <label
+                  className="text-sm font-bold cursor-pointer"
+                  onClick={() => {
+                    const willEnable = !enableInstallVersion;
+                    setEnableInstallVersion(willEnable);
+                    if (!willEnable) {
+                      setInstallOptions((prev) => ({
+                        ...prev,
+                        installVersion: "",
+                      }));
+                    }
+                  }}
+                >
+                  {t("admin.nodeTable.installVersion", "指定安装版本")}
+                </label>
+              </Flex>
+              {enableInstallVersion && (
+                <TextField.Root
+                  placeholder="snapshot"
+                  value={installOptions.installVersion}
+                  onChange={(e) =>
+                    setInstallOptions((prev) => ({
+                      ...prev,
+                      installVersion: e.target.value,
+                    }))
+                  }
+                />
+              )}
+
               <Flex gap="2" align="center">
                 <Checkbox
                   checked={enableGhproxy}
@@ -2161,7 +2343,7 @@ function GenerateCommandButton({ node, settings }: { node: NodeDetail, settings:
               onClick={() => copyToClipboard(generateCommand())}
             >
               <Copy size={16} />
-              {t("copy")}
+              {t("common.copy")}
             </Button>
           </Flex>
         </div>
@@ -2184,14 +2366,27 @@ function EditButton({ node }: { node: NodeDetail }) {
   const [saving, setSaving] = useState(false);
   const [traffic_limit, setTrafficLimit] = useState(0);
   const [traffic_limit_type, setTrafficLimitType] = useState("sum");
+  const [trafficLimitInput, setTrafficLimitInput] = useState("0 B");
+  const [trafficLimitInvalid, setTrafficLimitInvalid] = useState(false);
 
   React.useEffect(() => {
     setHidden(node.hidden);
     setTrafficLimit(node.traffic_limit || 0);
     setTrafficLimitType(node.traffic_limit_type || "sum");
+    setTrafficLimitInput(formatBytes(node.traffic_limit || 0));
+    setTrafficLimitInvalid(false);
   }, [node.hidden, node.traffic_limit, node.traffic_limit_type]);
 
   const save = async () => {
+    if (trafficLimitInvalid) {
+      toast.error(
+        t(
+          "admin.nodeEdit.trafficLimitInvalidSave",
+          "流量阈值格式无法解析，请先修正"
+        )
+      );
+      return;
+    }
     try {
       setSaving(true);
       const response = await fetch(`/api/admin/client/${node.uuid}/edit`, {
@@ -2376,15 +2571,36 @@ function EditButton({ node }: { node: NodeDetail }) {
               bordless
               title={t("admin.nodeEdit.trafficLimit")}
               description={t("admin.nodeEdit.trafficLimit_description")}
-              defaultValue={formatBytes(traffic_limit || 0)}
+              value={trafficLimitInput}
               showSaveButton={false}
               onChange={(e) => {
-                setTrafficLimit(stringToBytes(e.currentTarget.value));
+                const raw = e.currentTarget.value;
+                setTrafficLimitInput(raw);
+                const bytes = stringToBytes(raw);
+                if (bytes === null) {
+                  // 解析失败：标记错误，保留原值与用户输入，不静默置 0
+                  setTrafficLimitInvalid(true);
+                } else {
+                  setTrafficLimitInvalid(false);
+                  setTrafficLimit(bytes);
+                }
               }}
-              onBlur={(e) => {
-                e.currentTarget.value = formatBytes(traffic_limit);
+              onBlur={() => {
+                // 仅在解析成功时规范显示；解析失败时保留原始输入供用户修正
+                if (!trafficLimitInvalid) {
+                  setTrafficLimitInput(formatBytes(traffic_limit));
+                }
               }}
-            ></SettingCardShortTextInput>
+            >
+              {trafficLimitInvalid ? (
+                <span className="mt-1 text-sm text-red-500">
+                  {t(
+                    "admin.nodeEdit.trafficLimitInvalid",
+                    "无法解析该数值，支持如 100 GB / 512 MiB / 2T（最大 PB）"
+                  )}
+                </span>
+              ) : null}
+            </SettingCardShortTextInput>
           </SettingCardCollapse>
         </div>
         <Flex gap="2" justify={"end"} className="mt-4">
@@ -2396,7 +2612,7 @@ function EditButton({ node }: { node: NodeDetail }) {
           >
             {saving
               ? t("admin.nodeEdit.waiting", "等待...")
-              : t("save", "保存")}
+              : t("common.save", "保存")}
           </Button>
         </Flex>
       </Dialog.Content>
@@ -2670,7 +2886,7 @@ function BillingButton({ node }: { node: NodeDetail }) {
       );
       const expiredAtValue = (formData.get("expiredAt") as string) || "";
       const expiredAt = expiredAtValue
-        ? new Date(`${expiredAtValue}T00:00:00`).toISOString()
+        ? new Date(`${expiredAtValue}T00:00:00Z`).toISOString()
         : null;
       const currencyValue = (formData.get("currency") as string) || "$";
 
@@ -2791,7 +3007,7 @@ function BillingButton({ node }: { node: NodeDetail }) {
               onChange={setAutoRenewal}
             />
             <Button type="submit" disabled={saving}>
-              {t("save")}
+              {t("common.save")}
             </Button>
           </Flex>
         </form>

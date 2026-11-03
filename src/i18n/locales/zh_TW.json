@@ -1,5 +1,120 @@
 {
+  "adminNavigation": {
+    "operations": "監控與維運",
+    "system": "系統設定",
+    "security": "帳號與安全",
+    "site": "站台設定",
+    "general": "一般設定",
+    "login": "登入驗證",
+    "profile": "個人帳戶",
+    "sessions": "登入工作階段",
+    "pluginSettings": "外掛設定",
+    "events": "事件通知",
+    "pluginFeatures": "外掛功能",
+    "extensions": "外觀與外掛"
+  },
+  "notificationUpgrade": {
+    "title": "通知管道發生破壞性變更",
+    "description": "您是從低於 1.6.0 的版本升級而來。通知管道發生了破壞性變更，需要重新設定。請前往通知管道設定，重新設定並測試，以確保警報正常送達。",
+    "acknowledge": "知道了",
+    "configure": "前往設定"
+  },
+  "dashboardLayout": {
+    "workspace": "我的儀表板",
+    "editing": "編輯佈局",
+    "customize": "自訂",
+    "cards": "選擇卡片",
+    "selection": "已選擇 {{count}} 張卡片",
+    "reset": "恢復預設佈局",
+    "width": "卡片寬度",
+    "height": "卡片高度",
+    "visibleNodes": "顯示節點數",
+    "visibleNodesCount": "顯示 {{count}} 台節點",
+    "compact": "標準",
+    "wide": "加寬",
+    "full": "整行",
+    "short": "精簡",
+    "normal": "標準",
+    "tall": "加高",
+    "move": "移動{{name}}",
+    "hide": "隱藏{{name}}",
+    "saved": "儀表板佈局已儲存",
+    "saveFailed": "儲存失敗，佈局尚未儲存，請重試。",
+    "loadFailed": "佈局載入失敗，重試",
+    "empty": "暫無卡片",
+    "cores": "CPU 核心",
+    "ram": "總記憶體",
+    "storage": "總磁碟",
+    "capacityCount": "{{count}} 台節點的配置容量",
+    "servers": "伺服器管理",
+    "terminal": "遠端工作台",
+    "notifications": "通知設定",
+    "keyboard": "按空白鍵提起卡片，方向鍵移動，再按空白鍵放下，Escape 取消。",
+    "picked": "已提起{{name}}",
+    "moved": "{{name}}移至第 {{position}} 位",
+    "dropped": "卡片已放下",
+    "cancelled": "已取消移動",
+    "widgets": {
+      "overview": "上線概覽",
+      "database": "資料庫用量",
+      "expiry": "到期提醒",
+      "traffic": "24 小時流量",
+      "cpu": "CPU 使用排行",
+      "memory": "記憶體使用排行",
+      "ping": "網路品質",
+      "resources": "資源容量",
+      "disk": "磁碟壓力",
+      "shortcuts": "快捷操作"
+    }
+  },
+  "onboarding": {
+    "progress": "快速指引 · {{current}} / {{total}}",
+    "skip": "跳過指引",
+    "previous": "上一步",
+    "next": "下一步",
+    "finish": "知道了",
+    "save_failed": "指引紀錄儲存失敗，下次進入時可能會再次顯示。",
+    "install": {
+      "title": "接入第一台伺服器",
+      "description": "還沒有伺服器，先從「伺服器」進入節點管理，為你的伺服器新增一個節點。",
+      "add_title": "新增節點，安裝 Agent",
+      "add_description": "點擊這裡建立節點，再透過節點的部署按鈕複製安裝指令。在目標伺服器上執行指令，等待 Agent 回報後，節點就會上線。",
+      "action": "新增節點"
+    },
+    "workbench": {
+      "title": "試試遠端工作台",
+      "description": "已有伺服器，可以從這裡開啟工作台。點擊工作台中的終端按鈕並選擇伺服器，即可開始遠端終端工作階段。",
+      "files_title": "檔案管理也在這裡",
+      "files_description": "工作台還提供檔案瀏覽和編輯，可以上傳、下載及編輯遠端檔案。點擊工作台按鈕選擇伺服器，就能進入檔案工作區。",
+      "action": "開啟工作台"
+    },
+    "notifications": {
+      "title": "讓伺服器主動通知你",
+      "description": "在這裡新增並測試通知管道，將警報傳送到你常用的訊息服務。",
+      "offline_title": "伺服器離線，即時知曉",
+      "offline_description": "在離線通知中設定警報和延遲時間，減少短暫網路波動帶來的打擾。",
+      "rules_title": "依需求設定通知規則",
+      "rules_description": "一般通知提供其他警報規則的設定入口。先設定好通知管道，再依需求設定規則。",
+      "action": "設定通知"
+    },
+    "markets": {
+      "title": "逛逛主題市場",
+      "description": "在主題市場瀏覽主題，為監控頁面更換外觀。安裝後可在「主題」選單中管理。",
+      "plugins_title": "用外掛擴充 Komari",
+      "plugins_description": "外掛市場提供更多外掛功能。安裝後，可從「外掛」選單管理和設定外掛。",
+      "action": "瀏覽外掛"
+    },
+    "terminal": {
+      "title": "終端 Tab 還有更多功能",
+      "description": "右鍵點擊終端頂部的 Tab，即可開啟更多功能選單：重新命名、複製工作階段、設定標籤顏色，以及關閉其他工作階段。",
+      "tools_title": "檔案、搜尋與資源監控",
+      "tools_description": "同一個右鍵選單還提供文字搜尋、匯出終端內容、檔案管理、編輯器和資源監控。關閉指引後，右鍵 Tab 試試吧。"
+    }
+  },
   "about": {
+    "dependency_scope": "統計各專案清單中宣告的直接相依套件；Web 包含開發相依套件，不包含專案自身引用。間接相依套件不計入此清單。",
+    "development_dependency": "開發相依套件（依清單分類）",
+    "twemoji_notice": "程式碼採用 MIT，圖像採用 CC-BY-4.0；圖像未修改",
     "ai": "Komari 專案的開發過程得到了人工智慧工具的輔助。這些工具被用於執行程式碼生成、重構和除錯等任務，以提高開發效率和程式碼品質。所有由 AI 生成的程式碼和建議都經過了人類開發者的審查與驗證。",
     "open_source": "Komari 基於 MIT 協議開源，並使用了以下開源軟體構建：",
     "open_source_title": "開源軟體許可協議",
@@ -19,6 +134,7 @@
     "disable_2fa_confirmation": "您確定禁用2FA嗎？",
     "enable_2fa": "開啟雙重身份驗證",
     "greeting": "{{username}}，您今天想做什麼？",
+    "menu": "帳戶",
     "new_password": "新密碼",
     "new_password_repeat": "重複新密碼",
     "otp_empty_error": "空驗證碼",
@@ -30,34 +146,35 @@
     "title": "帳戶"
   },
   "account_settings": {
-    "bind_github": "綁定GitHub帳戶",
     "bind_sso": "綁定外部帳戶",
-    "cancel": "取消",
     "confirm_unbind": "確認解除綁定",
+    "looking_for_backup": "正在尋找備份？現已經遷移到設置-站點-備份。",
+    "sso_account": "外部帳戶",
+    "sso_account_bound": "{{name}}帳戶",
+    "sso_auth_failed": "處理SSO認證失敗",
+    "sso_bound": "已綁定外部帳戶",
+    "sso_not_bound": "未綁定",
+    "unbind_sso": "解除綁定外部帳戶",
+    "unbind_sso_failed": "解除綁定失敗",
+    "unbind_sso_success": "成功解除綁定",
+    "unbind_sso_warning": "確定要解除綁定 {{provider}} 帳號嗎？",
+    "upload_success": "上傳成功",
+    "bind_github": "綁定GitHub帳戶",
+    "cancel": "取消",
     "download_backup": "下載伺服器數據備份",
     "github_account": "GitHub帳戶",
     "github_auth_failed": "處理GitHub認證失敗",
     "github_bound": "已綁定",
     "github_not_bound": "未綁定GitHub帳戶",
     "github_unbound": "未綁定",
-    "looking_for_backup": "正在尋找備份？現已經遷移到設置-站點-備份。",
-    "sso_account": "外部帳戶",
-    "sso_auth_failed": "處理SSO認證失敗",
-    "sso_bound": "已綁定外部帳戶",
-    "sso_not_bound": "未綁定",
     "sso_unbound": "未綁定",
     "unbind_github": "解除綁定GitHub帳戶",
     "unbind_github_failed": "解除綁定GitHub帳戶失敗",
     "unbind_github_success": "已成功解除綁定GitHub帳戶",
     "unbind_github_warning": "解除綁定後，您將無法使用GitHub帳戶登入。確定要解除綁定嗎？",
-    "unbind_sso": "解除綁定外部帳戶",
-    "unbind_sso_failed": "解除綁定失敗",
-    "unbind_sso_success": "成功解除綁定",
-    "unbind_sso_warning": "確定要解除綁定 {{provider}} 帳號嗎？",
     "unknown_error": "未知錯誤",
     "upload_backup": "上傳伺服器數據備份",
-    "upload_failed": "上傳失敗，僅支持`.zip`格式",
-    "upload_success": "上傳成功"
+    "upload_failed": "上傳失敗，僅支持`.zip`格式"
   },
   "admin": {
     "nodeDetail": {
@@ -93,6 +210,8 @@
       "tokenPlaceholder": "請輸入 Token",
       "trafficLimit": "流量閾值",
       "trafficLimit_description": "用於首頁流量進度條，設置為 0 B 禁用。",
+      "trafficLimitInvalid": "無法解析該數值，支援如 100 GB / 512 MiB / 2T（最大 PB）",
+      "trafficLimitInvalidSave": "流量閾值格式無法解析，請先修正",
       "trafficLimitType": "統計方式",
       "trafficLimitType_down": "僅下載",
       "trafficLimitType_max": "取最大",
@@ -115,11 +234,7 @@
       "billing": "帳單",
       "billingCycle": "計費週期",
       "billingCycleTips": "<b>計費週期規則</b><br/> <br/> <b>按預設週期 (日曆續費)</b><br/> 當輸入的天數與預設方案（如月付、季付、年付）的數值相近時，將按對應的 <b>日曆週期</b> 續費。<br/> - 常用數值: 30 (月), 92 (季), 365 (年), 730 (兩年) 等。<br/> - 示例：輸入 30，服務從3月15日續費，新的到期日為 4月15日。<br/> <br/> <b>按自定義天數</b><br/> 當輸入其他天數時（如 7, 45, 100），將嚴格按 天數 續費。<br/> - 示例：輸入 45，服務從3月15日續費，新的到期日為 4月29日 (45天后)。<br/> <br/> <b>一次性付費</b><br/> 輸入 -1 表示一次性付費。",
-      "cancel": "取消",
       "cannotUndo": "這個操作將無法恢復！",
-      "clientVersion": "客戶端版本",
-      "confirm": "確認",
-      "confirmDelete": "確認刪除",
       "currency": "貨幣",
       "currencyTips": "¥-人民幣，$-美元，€-歐元，£-英鎊，₽-盧布，₣-法郎，₹-盧比，₫-越南盾，฿-泰銖",
       "customColumns": "自定義列",
@@ -148,10 +263,9 @@
       "install_dir_placeholder": "安裝目錄，為空則使用默認目錄(/opt/komari-agent)",
       "installCommand": "一鍵部署指令",
       "installOptions": "安裝選項",
+      "installVersion": "指定安裝版本",
       "interval": "採集間隔（秒）",
       "invalidPrice": "價格無效",
-      "ipAddress": "IP 地址",
-      "loading": "加載中...",
       "memoryModeAvailable": "包含緩衝區內存",
       "memoryModeAvailable_tip": "Agent 預設監測並上報已用記憶體，勾選此選項將上報已用記憶體+緩衝區記憶體。",
       "monthRotate": "網路統計月重置日",
@@ -160,7 +274,6 @@
       "namePlaceholder": "名稱",
       "noData": "沒有數據",
       "nodeList": "節點列表",
-      "noResults": "沒有結果",
       "price": "價格",
       "priceTips": "0不顯示，-1表示免費",
       "searchByName": "查找伺服器",
@@ -168,7 +281,14 @@
       "serviceName_placeholder": "服務名稱，為空則使用默認名稱(komari-agent)",
       "setToLongTerm": "設置為長期",
       "submit": "提交",
-      "submitting": "等待"
+      "submitting": "等待",
+      "cancel": "取消",
+      "clientVersion": "客戶端版本",
+      "confirm": "確認",
+      "confirmDelete": "確認刪除",
+      "ipAddress": "IP 地址",
+      "loading": "加載中...",
+      "noResults": "沒有結果"
     },
     "notification": {
       "expire_enable": "是否啟用過期提醒",
@@ -182,10 +302,10 @@
       "traffic_description": "Komari將會在伺服器到達指定的流量使用百分比時傳送通知，並以5%為梯度持續提醒。如果伺服器沒有設定流量閾值，不傳送通知。設定為0停用流量提醒。"
     }
   },
-  "cancel": "取消",
   "chart": {
     "addChart": "新增圖表",
     "addMetric": "新增指標",
+    "approximate": "近似",
     "avg": "平均值",
     "connections": "連接數",
     "cpu_usage": "CPU 使用率",
@@ -194,16 +314,18 @@
     "cutPeak_tips": "關於數據平滑的提示",
     "dashboard": "圖表",
     "days": "{{count}} 天",
-    "disk_used": "磁碟",
+    "days_one": "{{count}} 天",
+    "days_other": "{{count}} 天",
     "downsampleAlgorithm": "降採樣",
     "endTime": "結束時間",
     "fillEmpty": "補空值",
-    "globalTemplateSaveFailed": "儲存全域圖表範本失敗",
     "globalTemplateSaved": "全域圖表範本已儲存",
+    "globalTemplateSaveFailed": "儲存全域圖表範本失敗",
     "gpu_memory": "顯存使用率",
     "hideAll": "隱藏全部",
     "hours": "{{count}} 小時",
-    "minutes": "{{count}} 分鐘",
+    "hours_one": "{{count}} 小時",
+    "hours_other": "{{count}} 小時",
     "interval": "檢測間隔",
     "invalidTimeRange": "開始時間必須早於結束時間",
     "latest": "最新",
@@ -212,17 +334,20 @@
     "max": "最大值",
     "mem_used": "記憶體",
     "min": "最小值",
-    "network_down": "下載",
+    "minutes": "{{count}} 分鐘",
+    "minutes_one": "{{count}} 分鐘",
+    "minutes_other": "{{count}} 分鐘",
     "network_up": "上傳",
     "process": "進程數",
     "query": "查詢",
     "quickRange": "快速選擇",
     "recentDay": "最近 1 天",
     "recentDays": "最近 {{count}} 天",
+    "recentDays_one": "最近 {{count}} 天",
+    "recentDays_other": "最近 {{count}} 天",
     "recentWeek": "最近 1 週",
     "removeMetric": "刪除指標",
     "sampling": {
-      "average": "平均值",
       "first": "第一個值",
       "last": "最後一個值",
       "max": "最大值",
@@ -230,7 +355,8 @@
       "p70": "第 70 百分位",
       "p95": "第 95 百分位",
       "p99": "第 99 百分位",
-      "stddev": "標準差"
+      "stddev": "標準差",
+      "average": "平均值"
     },
     "samplingAlgorithm": "採樣演算法",
     "samplingAlgorithmTips": "<b>降採樣說明</b><br/>查詢歷史時間範圍時，後端會依照請求的時間間隔把資料點歸入對齊後的固定時間桶，再用目前選擇的演算法為每個時間桶計算一個值。<br/><br/>平均值/最小值/最大值/第一個值/最後一個值/標準差和百分位都會在每個時間桶內部計算。空時間桶會保持為空，所以圖表上的斷點仍然表示該時間段沒有資料。",
@@ -240,14 +366,14 @@
     "swap_used": "虛擬記憶體",
     "tcp_connections": "TCP",
     "total": "樣本數量",
-    "type": "類型",
     "udp_connections": "UDP",
     "usage": "使用率",
     "valid": "有效樣本",
-    "approximate": "近似",
-    "volatility": "波動"
+    "volatility": "波動",
+    "disk_used": "磁碟",
+    "network_down": "下載",
+    "type": "類型"
   },
-  "close": "關閉",
   "color": {
     "amber": "琥珀色",
     "blue": "藍色",
@@ -276,9 +402,6 @@
     "violet": "紫羅蘭",
     "yellow": "黃色"
   },
-  "command_clipboard": {
-    "title": "命令剪貼板"
-  },
   "common": {
     "about": "關於",
     "action": "操作",
@@ -286,15 +409,23 @@
     "added_successfully": "成功添加",
     "all": "所有",
     "annual": "年",
+    "appearance": "外觀",
+    "batch_edit": "批次修改",
     "biennial": "兩年",
     "cancel": "取消",
+    "clear_search": "清除搜尋",
     "close": "關閉",
+    "close_sidebar": "關閉選單",
+    "color": "強調色",
     "confirm": "確認",
     "confirm_delete": "確認刪除",
     "content": "內容",
+    "copy": "複製",
+    "dashboard": "儀表板",
     "day": "天",
     "delete": "刪除",
     "deleted_successfully": "已刪除",
+    "description": "描述",
     "deselect_all": "取消全選",
     "details": "詳情",
     "disabled": "停用",
@@ -313,17 +444,24 @@
     "have_been_omitted": "{{count}}已省略",
     "help": "幫助",
     "home": "主頁",
+    "language": "語言",
+    "logout": "登出",
     "long_term": "長期",
+    "menu_sidebar": "選單",
     "monthly": "月",
+    "more": "更多",
     "name": "名稱",
+    "next_page": "下一頁",
     "no_results": "沒有結果",
     "none": "無",
     "once": "一次性",
+    "previous_page": "上一頁",
     "private_site": "這是一個私有的Komari站點，請先登入。",
     "quarterly": "季",
     "quinquennial": "五年",
     "real_time": "實時",
     "refresh": "刷新",
+    "region_flag_alt": "地區旗幟: {{name}}",
     "remark": "備註",
     "reset": "重置",
     "retry": "重試",
@@ -331,6 +469,10 @@
     "search": "搜尋",
     "select": "選擇",
     "select_all": "全選",
+    "select_clients": "選擇客戶端",
+    "select_nodes": "選擇節點",
+    "select_ping_tasks": "選擇 Ping 任務",
+    "select_tasks": "選擇任務",
     "selected": "{{count}}選擇",
     "selected_total": "已選 {{count}} / 共 {{total}}",
     "semi_annual": "半年",
@@ -345,18 +487,102 @@
     "threshold": "閾值",
     "title": "標題",
     "triennial": "三年",
+    "type": "型別",
     "ungrouped": "未分組",
     "unknown": "未知",
+    "unknownError": "未知錯誤",
     "update": "更新",
     "update_available": "有新版本",
     "updated_successfully": "成功更新",
     "weight": "權重"
   },
-  "copy": "複製",
   "copy_success": "已複製到剪貼板",
   "current_online": "當前在線",
   "current_time": "當前時間",
-  "delete": "刪除",
+  "dashboard": {
+    "avgCpu": "平均 CPU",
+    "daysLeft": "剩餘 {{days}} 天",
+    "dbUsage": "資料庫佔用",
+    "downloadRate": "下載速率",
+    "downloadTotal": "累計下載",
+    "expiringSoon": "即將到期",
+    "greeting": "願每一台伺服器都穩定運行，一切盡在掌握",
+    "health": {
+      "danger": "危險",
+      "dangerDesc": "大部分伺服器離線，集群狀態異常",
+      "empty": "暫無資料",
+      "emptyDesc": "尚未新增任何伺服器。",
+      "healthy": "健康",
+      "healthyDesc": "所有伺服器均在線，狀態良好",
+      "warning": "警告",
+      "warningDesc": "部分伺服器離線，請注意檢查"
+    },
+    "highestLoss": "丟包最高",
+    "mainDb": "主資料庫",
+    "monitoringDb": "監控資料庫",
+    "noData": "暫無資料",
+    "noExpiring": "無伺服器即將到期",
+    "noOfflineNodes": "無離線伺服器",
+    "offlineListAria": "離線伺服器列表",
+    "offlineNodes": "離線 {{offline}} 台",
+    "onlineNodes": "線上 {{online}}/{{total}} 台",
+    "onlineRateAria": "伺服器上線率 {{percent}}%",
+    "overview": "總覽",
+    "peakAt": "峰值 {{value}} at {{time}}",
+    "renewed": "我已續費",
+    "renewFailed": "續費失敗",
+    "renewing": "續費中...",
+    "renewNotSupported": "該伺服器未設定計費週期",
+    "renewSuccess": "續費成功，新到期時間：{{date}}",
+    "stableLatency": "延遲最穩定",
+    "title": "儀表板",
+    "today": "今天",
+    "topCpu": "平均 CPU 占用排行",
+    "topMem": "平均記憶體占用百分比排行",
+    "topTraffic": "流量消耗 Top 5",
+    "traffic24h": "最近24小時流量",
+    "trafficChartAria": "最近24小時流量圖，顯示上傳/下載速率與累計流量",
+    "unstableLatency": "延遲最不穩定",
+    "uploadRate": "上傳速率",
+    "uploadTotal": "累計上傳",
+    "viewChart": "查看24小時圖表",
+    "yesterday": "昨天"
+  },
+  "database_migration": {
+    "after": "遷移後",
+    "before": "遷移前",
+    "failed_title": "資料庫遷移未完成",
+    "legacy_full_history": "完整遷移資料庫，遷移完成後會回收一次空間。",
+    "network_error": "無法連線資料庫遷移服務。",
+    "request_failed": "請求失敗，請檢查服務日誌後重試。"
+  },
+  "database_recovery": {
+    "completed_description": "伺服器正在重新啟動一般控制台。",
+    "completed_title": "資料庫連線已恢復",
+    "dsn_required": "請輸入監控資料庫連線字串。",
+    "failure_detail": "資料庫連線已連續失敗 {{count}}/{{max}} 次。",
+    "history_note": "復原流程只會使用新的 DSN 重新連線，不會從原連線遷移任何資料。",
+    "network_error": "無法連線到復原服務。",
+    "request_failed": "要求失敗，請重試。",
+    "save": "儲存並重新連線",
+    "save_failed": "監控資料庫連線失敗，請檢查連線字串後重試。",
+    "saving": "連線中...",
+    "subtitle": "目前無法連線到監控資料庫。請登入後更新連線字串。",
+    "title": "監控資料庫復原"
+  },
+  "errorBoundary": {
+    "go_to_home": "返回首頁",
+    "no_stack_trace": "無可用的堆畸追蹤。",
+    "reload_page": "重新載入頁面",
+    "something_went_wrong": "出現了一些問題",
+    "unexpected_error": "發生了意外錯誤。",
+    "view_error_details": "檢視錯誤詳情"
+  },
+  "eula": {
+    "accept": "我已詳細閱讀並接受",
+    "reject": "不接受",
+    "title": "法律聲明與合規指引"
+  },
   "exec": {
     "allCompleted": "所有任務執行完成",
     "command": "執行命令",
@@ -374,24 +600,183 @@
     "selectedNodes": "已選擇節點",
     "selectNodes": "選擇目標節點",
     "status": {
-      "failed": "失敗",
+      "polling": "正在取得最新執行狀態...",
       "running": "正在運行",
-      "success": "成功",
-      "timeout": "超時"
+      "timeout": "超時",
+      "failed": "失敗",
+      "success": "成功"
     },
-    "success": "命令執行完成",
+    "stopPolling": "停止輪詢",
     "taskStarted": "任務已啟動",
-    "title": "遠程執行"
+    "title": "遠程執行",
+    "success": "命令執行完成"
+  },
+  "file_manager": {
+    "action_failed": "檔案操作失敗",
+    "action_success": "檔案操作完成",
+    "confirm_delete": "確定刪除 {{name}} 嗎？此操作無法復原。",
+    "confirm_delete_multiple": "確定刪除 {{count}} 個項目？此操作無法復原。",
+    "content": "內容",
+    "copy": "複製",
+    "copy_directory_unsupported": "目前不支援複製資料夾。",
+    "copy_here": "貼上到此處",
+    "copy_path": "複製路徑",
+    "copy_path_failed": "複製路徑失敗",
+    "copy_path_success": "路徑已複製",
+    "copy_paths": "複製路徑",
+    "cut": "剪下",
+    "delete": "刪除",
+    "download": "下載",
+    "drive": "磁碟",
+    "editor": {
+      "binary": "二進位檔案預覽",
+      "close_file": "關閉檔案",
+      "close_left": "關閉左側",
+      "close_others": "關閉其他",
+      "close_right": "關閉右側",
+      "close_tab": "關閉分頁",
+      "column": "欄",
+      "copy": "複製",
+      "cut": "剪下",
+      "dont_save": "不儲存",
+      "empty": "從檔案總管開啟檔案",
+      "encoding_failed": "無法使用此編碼解碼檔案",
+      "encoding_hint": "文字編碼（開啟時自動偵測）",
+      "explorer": "檔案總管",
+      "fullscreen": "切換全螢幕",
+      "go_to": "前往檔案",
+      "go_to_placeholder": "輸入檔案路徑",
+      "go_to_position": "前往行/欄",
+      "line": "行",
+      "loading_agent": "正在從 Agent 取得檔案...",
+      "maximize": "最大化",
+      "menu": {
+        "edit": "編輯",
+        "file": "檔案",
+        "terminal": "終端",
+        "view": "檢視"
+      },
+      "minimap": "縮圖",
+      "no_symbols": "找不到符號",
+      "open_terminal_dock": "在底部開啟終端",
+      "outline": "大綱",
+      "paste": "貼上",
+      "preview_failed": "無法預覽此檔案",
+      "redo": "重做",
+      "reopen": "重新開啟",
+      "reopen_with_encoding": "以編碼重新開啟",
+      "reopen_with_encoding_description": "要以 {{encoding}} 重新開啟「{{name}}」嗎？未儲存的修改將被捨棄。",
+      "reopen_with_encoding_title": "以編碼重新開啟？",
+      "restore": "還原",
+      "save": "儲存",
+      "save_all": "全部儲存",
+      "save_with_encoding": "以編碼儲存",
+      "saved": "檔案已儲存",
+      "select_all": "全選",
+      "title": "檔案編輯器",
+      "too_large": "大於 {{size}} 的檔案無法在編輯器中開啟。",
+      "too_large_preview": "檔案過大，無法預覽",
+      "undo": "復原",
+      "unsaved_all": "有 {{count}} 個檔案包含未儲存的變更。",
+      "unsaved_file": "是否儲存對 {{name}} 的變更？",
+      "unsaved_title": "儲存變更？",
+      "word_wrap": "自動換行"
+    },
+    "empty": "此目錄為空",
+    "group": "群組",
+    "load_failed": "檔案管理員載入失敗",
+    "loading": "正在載入...",
+    "mode": "權限",
+    "move_here": "移動到此處",
+    "new_file": "新增檔案",
+    "new_folder": "新增資料夾",
+    "no_results": "沒有搜尋結果",
+    "no_server": "開啟終端分頁後即可瀏覽對應伺服器檔案",
+    "open": "開啟",
+    "open_in_editor": "在編輯器中開啟",
+    "owner": "擁有者",
+    "parent": "上層目錄",
+    "paste": "貼上",
+    "path": "路徑",
+    "permissions": "權限與擁有者",
+    "rename": "重新命名",
+    "root_unavailable": "無法取得根目錄",
+    "save_failed": "儲存檔案失敗",
+    "search": "搜尋",
+    "search_content": "搜尋檔案內容",
+    "search_failed": "搜尋失敗",
+    "search_placeholder": "搜尋檔案",
+    "search_results": "{{count}} 個結果",
+    "title": "檔案管理",
+    "upload": "上傳",
+    "upload_canceled": "上傳已取消",
+    "upload_chunk": "分片",
+    "upload_chunk_done": "已完成",
+    "upload_chunk_queued": "佇列中",
+    "upload_chunk_retrying": "重試中",
+    "upload_chunk_summary": "僅顯示正在上傳的分片（並行 {{active}} 個，共 {{count}} 個）",
+    "upload_chunk_uploading": "上傳中",
+    "upload_chunks": "分片上傳",
+    "upload_complete": "上傳完成",
+    "upload_destination": "目標",
+    "upload_failed": "上傳失敗",
+    "uploading": "上傳中"
   },
   "go_to_home": "回到首頁",
-  "home_title": "Komari Monitor",
-  "just_now": "剛剛",
-  "loadAlert": {
-    "metric": "監控項",
-    "ratio": "時間佔比",
-    "threshold_placeholder": "百分比，例如80代表80%",
-    "title": "負載警報"
+  "install": {
+    "admin_title": "建立管理員帳號",
+    "back": "上一步",
+    "color": "色彩",
+    "complete": "完成安裝",
+    "completed": "安裝已完成，請返回登入。",
+    "confirm_title": "確認安裝設定",
+    "connection_error": "無法連線到伺服器",
+    "database": "資料庫",
+    "database_title": "監控資料庫",
+    "description": "網站說明",
+    "detected_database": "目前識別為 {{driver}}。",
+    "dsn_required": "請輸入監控資料庫 DSN。",
+    "failed": "安裝失敗，請稍後再試。",
+    "next": "下一步",
+    "password": "密碼",
+    "password_confirm": "確認密碼",
+    "restore": "從備份恢復",
+    "restore_413": "備份上傳失敗（413）。請調整 CDN 或 Nginx 等反向代理的檔案大小限制（例如 client_max_body_size），或手動將備份上傳到 ./data/backup.zip 後重新啟動服務。",
+    "restore_description": "上傳備份檔案會重新啟動服務並恢復其中的資料。",
+    "restore_failed": "恢復備份失敗，請稍後再試。",
+    "restore_file_type": "請選擇 .zip 格式的備份檔案。",
+    "restore_restarting": "正在重新啟動並恢復備份...",
+    "site": "網站",
+    "site_hint": "這些內容會顯示在瀏覽器標題和公開頁面中。",
+    "site_title": "網站資訊",
+    "sitename": "網站名稱",
+    "sitename_required": "請輸入網站名稱。",
+    "sqlite_warning": "SQLite 適合輕量部署；隨著監控資料增長，可能遇到效能瓶頸。需要長期保存大量指標時，建議改用 MariaDB、MySQL 或 PostgreSQL。",
+    "start": "開始安裝",
+    "steps": {
+      "administrator": "管理員",
+      "confirm": "確認",
+      "database": "資料庫",
+      "site": "網站",
+      "welcome": "歡迎"
+    },
+    "summary_admin": "管理員：",
+    "summary_database": "資料庫：",
+    "summary_dsn": "DSN：",
+    "summary_sitename": "網站名稱：",
+    "title": "安裝精靈",
+    "username": "使用者名稱",
+    "username_required": "請輸入使用者名稱。",
+    "welcome_description": "設定管理員帳號、網站資訊和監控資料庫。",
+    "welcome_subtitle": "輕量、開源的伺服器監控工具。",
+    "welcome_title": "歡迎使用 Komari",
+    "welcome": "歡迎",
+    "administrator": "管理員",
+    "confirm": "確認",
+    "language": "語言",
+    "appearance": "外觀"
   },
+  "just_now": "剛剛",
   "loading": "加載中...",
   "log": {
     "title": "日誌"
@@ -402,6 +787,7 @@
     "login_with_github": "使用 GitHub 登入",
     "password": "密碼",
     "password_placeholder": "請輸入您的密碼",
+    "request_failed": "登入失敗，請重試。",
     "title": "登入",
     "two_factor": "雙因素認證",
     "username": "用戶名"
@@ -409,14 +795,65 @@
   "logs": {
     "title": "日誌"
   },
+  "market": {
+    "add_source": "新增來源",
+    "delete_source_confirm": "確定刪除來源 {{name}} 嗎？",
+    "description": "尋找並安裝來自網際網路的主題",
+    "edit_source": "編輯來源",
+    "enabled": "啟用",
+    "install": "安裝",
+    "install_success": "主題安裝成功",
+    "install_unavailable": "暫無安裝包",
+    "installed": "已安裝",
+    "installed_version": "已安裝 v{{version}}",
+    "manage_sources": "管理來源",
+    "no_sources": "尚未設定來源",
+    "no_themes": "找不到主題",
+    "project_page": "專案首頁",
+    "refresh_success": "主題來源已重新整理",
+    "search_placeholder": "搜尋主題、作者或來源",
+    "source": "來源",
+    "source_created": "來源已新增",
+    "source_deleted": "來源已刪除",
+    "source_name": "來源名稱",
+    "source_updated": "來源已更新",
+    "themes": "主題市場",
+    "uninstall": "解除安裝",
+    "uninstall_confirm": "確定解除安裝 {{name}} 嗎？",
+    "uninstall_success": "主題已解除安裝",
+    "update_available": "有可用更新",
+    "refresh": "重新整理",
+    "title": "市場",
+    "update": "更新"
+  },
+  "metric_store_restructure": {
+    "after": "重構後",
+    "before": "重構前",
+    "completed_description": "伺服器正在啟動一般服務。",
+    "completed_title": "監控資料庫結構重構完成",
+    "confirm_description": "歷史指標會複製到新的字典化彙總結構，完成後會回收一次資料庫空間。操作期間一般服務暫時不可用。",
+    "confirm_title": "開始重構資料庫結構？",
+    "copy_detail": "已複製 {{rows}} / {{total}} 筆記錄，完成 {{metrics}} / {{metricTotal}} 個指標。目前指標：{{metric}}。",
+    "discard": "刪除歷史監控資料",
+    "discard_action": "確認刪除",
+    "discard_confirm": "我確認永久刪除全部歷史監控資料",
+    "discard_description": "如果不需要保留歷史監控資料，可以略過複製並直接建立新的空資料庫結構。指標定義與保留策略不會被刪除。",
+    "discard_detail": "正在刪除歷史監控資料並建立新的空資料庫結構。",
+    "discard_title": "刪除全部歷史監控資料？",
+    "discard_warning": "此操作無法復原，現有歷史圖表資料將全部清空。",
+    "network_error": "無法連線到結構重構服務。",
+    "phase_copying": "正在複製指標彙總",
+    "phase_discarding": "正在刪除歷史監控資料",
+    "phase_reclaiming": "正在最佳化資料庫並回收磁碟空間。",
+    "start": "開始重構",
+    "start_failed": "無法開始資料庫結構重構。",
+    "title": "監控資料庫結構重構"
+  },
   "network_speed": "網路速率",
   "nodeCard": {
-    "actions": "操作",
-    "arch": "架構",
     "basicInfo": "基本資訊",
     "chart": "圖表",
     "clickToViewPing": "點擊查看延遲圖表",
-    "cpu": "CPU",
     "disk": "磁碟",
     "groupNodes": "{{group}} 分組: 共 {{total}} 個伺服器，{{online}} 個伺服器在線",
     "kernelVersion": "內核版本",
@@ -432,11 +869,9 @@
     "online": "在線",
     "os": "作業系統",
     "ping": "延遲",
-    "price": "價格",
     "ram": "記憶體",
     "resourceUsage": "資源使用",
     "sortTooltip": "點擊切換排序：正序 → 倒序 → 預設",
-    "status": "狀態",
     "swap": "交換",
     "temperature": "溫度",
     "time_day": "天",
@@ -448,12 +883,35 @@
     "totalTraffic": "總流量",
     "totalUpload": "總上傳",
     "uptime": "運行時間",
-    "virtualization": "虛擬化"
+    "virtualization": "虛擬化",
+    "actions": "操作",
+    "arch": "架構",
+    "cpu": "CPU",
+    "price": "價格",
+    "status": "狀態"
   },
   "nodes": {
     "empty": "暫無伺服器資料"
   },
   "notification": {
+    "channels": {
+      "title": "通知頻道"
+    },
+    "general": {
+      "title": "通用事件"
+    },
+    "offline": {
+      "cooldown": "冷靜期",
+      "full_title": "離線通知設定",
+      "grace_period": "寬限期",
+      "grace_period_tip": "低於45秒的寬限期可能會無法及時觸發在線通知",
+      "last_notified": "最後通知",
+      "never_triggered": "從未觸發",
+      "tips": "為了避免頻繁發送通知，我們設定了寬限期：</br> <b>寬限期</b>：客戶端離線後，如果在這段時間內沒有重新上線，就會發送離線通知",
+      "title": "離線通知",
+      "batch_edit": "批量修改"
+    },
+    "title": "通知",
     "overview": {
       "title": "通知總覽"
     },
@@ -463,18 +921,6 @@
     "load": {
       "title": "負載通知"
     },
-    "offline": {
-      "batch_edit": "批量修改",
-      "cooldown": "冷靜期",
-      "full_title": "離線通知設定",
-      "grace_period": "寬限期",
-      "grace_period_tip": "低於45秒的寬限期可能會無法及時觸發在線通知",
-      "last_notified": "最後通知",
-      "never_triggered": "從未觸發",
-      "tips": "為了避免頻繁發送通知，我們設定了寬限期：</br> <b>寬限期</b>：客戶端離線後，如果在這段時間內沒有重新上線，就會發送離線通知",
-      "title": "離線通知"
-    },
-    "title": "通知",
     "visitor": {
       "title": "訪客通知"
     },
@@ -495,13 +941,11 @@
       "weekly": "週報"
     }
   },
+  "operations": {
+    "title": "維運",
+    "workbench": "工作臺"
+  },
   "page_not_found": "真不巧，網頁被小鞠吃掉了。",
-  "tcp_quality": {
-    "title": "TCP 連線品質"
-  },
-  "unlock_quality": {
-    "title": "解鎖線路品質"
-  },
   "ping": {
     "all_servers": "全部伺服器",
     "all_servers_description": "勾選後，當前和後續新增的伺服器都會開啟該監測。",
@@ -515,6 +959,151 @@
     "task_view": "任務視圖",
     "title": "延遲監測",
     "type": "類型"
+  },
+  "plugin": {
+    "config": "設定",
+    "config_no_configurable_plugins": "沒有帶設定項目的外掛",
+    "config_no_items": "此外掛沒有設定項目",
+    "config_select_plugin": "請在左側選擇要設定的外掛",
+    "config_save_failed": "儲存設定失敗",
+    "config_saved": "設定已儲存",
+    "config_saved_and_reloaded": "設定已儲存，外掛已重新載入",
+    "config_saved_reload_failed": "設定已儲存，但外掛重新載入失敗",
+    "config_select_hint": "請選擇要設定的外掛",
+    "delete": "刪除外掛",
+    "delete_confirm": "確定刪除此外掛？",
+    "delete_confirm_desc": "外掛目錄及其設定將被移除。",
+    "deleted": "外掛已刪除",
+    "deleting": "刪除中...",
+    "disable": "停用外掛",
+    "disable_success": "外掛已停用",
+    "drag_drop": "將檔案拖放到此處",
+    "enable": "啟用外掛",
+    "enable_success": "外掛已啟用",
+    "installed": "已安裝",
+    "invalid_file_type": "無效的檔案型別，僅支援 .zip 檔案",
+    "last_error": "最後錯誤",
+    "loading": "載入中...",
+    "logs_load_failed": "載入日誌失敗",
+    "manage": "外掛管理",
+    "market": "外掛市集",
+    "market_install": "安裝",
+    "market_install_success": "外掛已安裝",
+    "market_installing": "安裝中...",
+    "market_modify": "修改",
+    "market_no_plugins": "市集中暫無外掛",
+    "market_not_installable": "無法安裝",
+    "market_plugins": "外掛",
+    "market_refresh_success": "外掛來源已重新整理",
+    "market_reinstall": "重新安裝",
+    "market_category": "外掛分類",
+    "categories": {
+      "notification": "通知管道",
+      "monitoring": "監控與警報",
+      "network": "網路與網域",
+      "security": "登入與安全",
+      "integration": "資料與整合",
+      "utility": "系統與工具",
+      "uncategorized": "未分類"
+    },
+    "market_search": "搜尋外掛...",
+    "market_uninstall_success": "外掛已卸載",
+    "market_update_required": "需要更新 Komari",
+    "market_warning": "外掛市集中的第三方外掛未經官方審查，可能包含有害程式碼，請仔細甄別後再安裝。",
+    "no_logs": "暫無日誌",
+    "no_plugins": "尚未安裝外掛",
+    "or_click_to_browse": "或點選瀏覽檔案",
+    "page_missing_params": "缺少外掛頁面參數",
+    "permission": {
+      "allowAllFileAccess": "存取外掛目錄之外的檔案",
+      "allowExec": "執行子程式",
+      "allowHooks": "修改 HTTP 請求/回應",
+      "allowHTMLInject": "向每個 HTML 頁面注入 CSS/JS",
+      "allowListen": "監聽本機連接埠",
+      "allowRoutes": "註冊 HTTP 路由",
+      "allowSystemRPC": "呼叫系統 RPC"
+    },
+    "permission_approve": "核准並啟用",
+    "permission_default_note": "預設授予：讀取外掛設定、註冊外掛 RPC、讀寫外掛目錄內的檔案",
+    "permission_description": "此外掛請求下列權限：",
+    "permission_none": "此外掛不請求任何特殊權限",
+    "permission_title": "需要權限",
+    "running": "執行中",
+    "save_and_reload": "儲存並重新載入",
+    "saving": "儲存中...",
+    "saving_and_reloading": "儲存並重新載入中...",
+    "stopped": "已停止",
+    "title": "外掛",
+    "upload": "上傳外掛",
+    "upload_413_content_too_large": "檔案上傳失敗 (413)。請檢查並加大反向代理伺服器（如 Nginx/CDN）設定中的檔案大小限制（client_max_body_size），確保該值大於目標檔案大小。",
+    "upload_description": "上傳 .zip 外掛套件",
+    "upload_failed": "外掛上傳失敗",
+    "uploaded": "外掛已上傳",
+    "uploading": "上傳中...",
+    "zip_files_only": "僅支援 .zip 檔案"
+  },
+  "pprof": {
+    "capture_duration": "CPU 與 trace 擷取時長",
+    "download": "下載",
+    "duration_option": "{{seconds}} 秒",
+    "goroutines": "Goroutine 數量",
+    "heap_alloc": "已配置堆積記憶體",
+    "heap_inuse": "正在使用的堆積記憶體",
+    "heap_objects": "堆積物件數",
+    "heap_preview_description": "即時堆積記憶體文字摘要，會隨程式概覽一起重新整理。",
+    "heap_preview_title": "堆積記憶體快照",
+    "invalid_summary": "伺服器返回了無效的執行期效能資料",
+    "loading": "正在擷取...",
+    "preview_description": "所選 Go 執行期效能資料的文字輸出。",
+    "preview_title": "{{profile}} 效能資料",
+    "preview_unavailable": "此執行期效能資料不提供文字預覽。",
+    "profiles": {
+      "allocs": {
+        "description": "程式啟動以來的累積記憶體配置取樣。",
+        "title": "配置"
+      },
+      "block": {
+        "description": "同步阻塞事件。",
+        "title": "阻塞"
+      },
+      "cpu": {
+        "description": "依選定時長擷取 CPU 執行取樣。",
+        "title": "CPU"
+      },
+      "goroutine": {
+        "description": "目前 Goroutine 堆疊效能資料。",
+        "title": "Goroutine"
+      },
+      "heap": {
+        "description": "仍在使用的堆積記憶體配置取樣。",
+        "title": "堆積記憶體"
+      },
+      "mutex": {
+        "description": "發生競爭的互斥鎖事件。",
+        "title": "互斥鎖"
+      },
+      "threadcreate": {
+        "description": "作業系統執行緒建立事件。",
+        "title": "執行緒"
+      },
+      "trace": {
+        "description": "依選定時長擷取執行追蹤資料。",
+        "title": "Trace"
+      }
+    },
+    "profiles_description": "可檢視文字快照，或下載 pprof 檔案進行離線分析。",
+    "profiles_title": "執行期效能資料",
+    "request_failed": "取得執行期效能資料失敗",
+    "runtime_overview_description": "不需啟動效能擷取即可讀取的執行期即時指標。",
+    "runtime_overview_title": "目前程式概覽",
+    "runtime_sys": "執行期保留記憶體",
+    "sample_count": "{{samples}} 個樣本",
+    "summary_load_failed": "讀取執行期效能資料失敗",
+    "summary_unavailable": "目前無法讀取執行期概覽",
+    "timed_profile": "依選定時長擷取",
+    "title": "效能分析",
+    "view": "檢視",
+    "warning": "效能資料擷取期間可能短暫增加伺服器負載。"
   },
   "pwa": {
     "browser": "瀏覽器模式",
@@ -555,19 +1144,15 @@
     "websocket_error": "WebSocket 錯誤:",
     "websocket_not_connected": "WebSocket 未連線"
   },
-  "save": "儲存",
   "search": {
     "no_results": "未找到匹配的伺服器",
     "placeholder": "搜尋節點名稱、地區、系統...",
     "results": "找到 {{count}} 個伺服器，共 {{total}} 個",
     "try_different": "嘗試不同的搜尋關鍵詞"
   },
-  "select": "選擇",
   "sessions": {
     "actions": "操作",
     "active_sessions": "活動會話",
-    "cancel": "取消",
-    "confirm_delete": "確認刪除",
     "created_at": "創建時間",
     "current": "(當前)",
     "delete_all": "刪除全部會話",
@@ -580,10 +1165,12 @@
     "last_user_agent": "最後活動UA",
     "latest_ip": "最後活動IP",
     "latest_online": "最近在線",
-    "loading": "加載中...",
     "login_method": "登入方式",
     "session_id": "會話 ID",
-    "title": "會話管理"
+    "title": "會話管理",
+    "cancel": "取消",
+    "confirm_delete": "確認刪除",
+    "loading": "加載中..."
   },
   "settings": {
     "api": {
@@ -596,7 +1183,6 @@
       "body_description": "在頁面底部添加自定義內容",
       "favicon": "自定義 Favicon",
       "favicon_change": "更新 Favicon",
-      "favicon_confirm": "確認",
       "favicon_current": "當前 Favicon",
       "favicon_default": "恢復預設",
       "favicon_default_description": "這將恢復預設的 Favicon 圖示，是否繼續？",
@@ -607,7 +1193,8 @@
       "favicon_update_success": "已更新 Favicon",
       "header": "自定義頭部",
       "header_description": "添加自定義 HTML/CSS/JavaScript 到站點頭部，這些內容將會在所有頁面加載",
-      "note": "個性化內容在使用自定義主題時可能會被覆蓋。請確保代碼的安全性，避免使用不受信任的內容。"
+      "note": "個性化內容在使用自定義主題時可能會被覆蓋。請確保代碼的安全性，避免使用不受信任的內容。",
+      "favicon_confirm": "確認"
     },
     "database": {
       "actions": {
@@ -660,9 +1247,6 @@
     "invalid_number": "無效的數字",
     "metrics": {
       "advanced_title": "進階選項",
-      "low_resource_description": "啟用後，Komari 將降低資料的取樣頻率，節省資源佔用。",
-      "low_resource_enabled": "啟用",
-      "low_resource_title": "低資源模式",
       "batch_description": "選擇多個指標，並為它們統一設定原始資料保留天數。",
       "batch_edit": "批量設定",
       "batch_search_placeholder": "搜尋指標",
@@ -672,26 +1256,24 @@
       "canceling": "取消中...",
       "conns_invalid": "請輸入有效的連線數",
       "current_status": "目前狀態",
+      "downsampling_title": "資料降採樣",
       "dsn_description": "目前執行中的監控資料庫連線字串，系統會依連線字串自動辨識資料庫類型（SQLite / MariaDB / MySQL / PostgreSQL）。SQLite：./data/metrics.db；MariaDB / MySQL：user:password@tcp(host:3306)/metrics?charset=utf8mb4&parseTime=True；PostgreSQL：host=localhost user=komari password=secret dbname=metrics port=5432 sslmode=disable",
       "dsn_title": "連線字串（DSN）",
-      "downsampling_description": "啟用後，原始取樣保留 15 分鐘，歷史資料依 1 分鐘、5 分鐘及 1 小時分層彙總。關閉後不再產生降採樣資料，原始取樣依各指標的保留天數清理；已清理的原始資料不會恢復。",
-      "downsampling_enabled": "啟用",
-      "downsampling_title": "資料降採樣",
       "fetch_metrics_failed": "取得指標列表失敗",
       "fetch_status_failed": "取得遷移狀態失敗",
+      "hours_unit": "小時",
+      "intro": "在此設定監控資料庫，以及每個監控指標的原始資料保留策略。",
       "loading_metrics": "正在載入指標...",
       "max_idle_conns_description": "資料庫最大閒置連線數，預設 5",
       "max_idle_conns_title": "最大閒置連線數",
       "max_open_conns_description": "資料庫最大連線數，預設 25",
       "max_open_conns_title": "最大連線數",
-      "metric_description": "描述",
       "metric_key": "指標 Key",
       "metric_name": "指標名稱",
-      "metric_type": "類型",
       "metric_unit": "單位",
       "migrated_points": "已搬運取樣點",
-      "migration_canceled": "遷移已取消",
       "migration_cancel_failed": "取消遷移失敗",
+      "migration_canceled": "遷移已取消",
       "migration_canceled_hint": "遷移已取消。由於寫入是冪等的，可安全地重新發起遷移，不會產生重複資料。",
       "migration_card_description": "把某個監控資料來源庫（預設本機 SQLite ./data/metrics.db，或上一個使用過的資料庫）中的歷史資料搬運到目前執行中的監控目標庫。",
       "migration_card_title": "資料庫遷移",
@@ -704,9 +1286,11 @@
       "migration_started": "遷移已開始",
       "migration_target": "目標庫",
       "migration_title": "遷移",
+      "minutes_unit": "分鐘",
       "no_metrics": "暫無指標定義",
-      "retention_description": "資料保留天數，預設 1；設定為 0 將停用該指標持久化",
+      "restart_hint": "部分修改需要重新啟動服務後才會生效。",
       "retention_days": "保留天數",
+      "retention_description": "資料保留天數，預設 1；設定為 0 將停用該指標持久化",
       "retention_invalid": "請輸入有效的保留天數",
       "retention_save_failed": "儲存保留天數失敗",
       "retention_saved": "保留天數已儲存",
@@ -715,6 +1299,14 @@
       "retention_warning_continue": "仍然繼續",
       "retention_warning_description": "關閉資料降採樣並保留超過 1 天時，Agent 的全部原始採樣會持續寫入資料庫，可能快速增加資料庫大小並降低查詢效能。建議啟用降採樣；如確需長期保留原始資料，請使用 MariaDB、MySQL 或 PostgreSQL 等外部資料庫。",
       "retention_warning_title": "高頻原始資料儲存風險",
+      "rollup_five_minute_label": "5 分鐘桶",
+      "rollup_hour_label": "1 小時桶",
+      "rollup_minute_label": "1 分鐘桶",
+      "rollup_retention_description": "設定 1 分鐘、5 分鐘和 1 小時桶的全域保留時間。日桶繼續遵循各指標的保留天數，精確採樣固定在記憶體中保留 10 分鐘。縮短後的資料由每小時清理工作刪除。",
+      "rollup_retention_invalid": "請輸入每層桶的正整數保留時間。",
+      "rollup_retention_order_invalid": "保留時間必須按 1 分鐘、5 分鐘、1 小時桶遞增或保持不變。",
+      "rollup_retention_save": "儲存桶保留時間",
+      "rollup_retention_title": "指標桶保留時間",
       "save_changes": "儲存變更",
       "source_dsn_description": "留空時自動使用上一個使用過的監控資料庫（預設本機 SQLite ./data/metrics.db）作為來源庫；也可手動填寫來源庫連線字串。目標庫固定為目前執行中的監控資料庫。",
       "source_dsn_placeholder": "留空自動推斷，或填寫來源庫 DSN",
@@ -729,139 +1321,146 @@
         "idle": "閒置",
         "running": "進行中"
       },
-      "table_prefix_description": "監控表名前綴，預設 metric_",
-      "table_prefix_title": "表名前綴",
-      "title": "監控資料庫",
       "system": {
+        "connections": {
+          "tcp": {
+            "description": "TCP 連線數量",
+            "name": "TCP 連線數"
+          },
+          "udp": {
+            "description": "UDP 連線數量",
+            "name": "UDP 連線數"
+          }
+        },
         "cpu": {
           "usage": {
-            "name": "CPU 使用率",
-            "description": "CPU 使用率百分比"
+            "description": "CPU 使用率百分比",
+            "name": "CPU 使用率"
+          }
+        },
+        "disk": {
+          "total": {
+            "description": "磁碟總容量",
+            "name": "總磁碟"
+          },
+          "used": {
+            "description": "目前已用磁碟空間",
+            "name": "已用磁碟"
           }
         },
         "gpu": {
-          "usage": {
-            "name": "GPU 使用率",
-            "description": "節點級平均 GPU 使用率百分比"
-          },
           "device": {
             "usage": {
-              "name": "GPU 裝置使用率",
-              "description": "單個 GPU 裝置的使用率"
+              "description": "單個 GPU 裝置的使用率",
+              "name": "GPU 裝置使用率"
             }
           },
           "memory": {
-            "used": {
-              "name": "GPU 已用顯存",
-              "description": "GPU 目前已用顯存"
-            },
             "total": {
-              "name": "GPU 總顯存",
-              "description": "GPU 總顯存容量"
+              "description": "GPU 總顯存容量",
+              "name": "GPU 總顯存"
+            },
+            "used": {
+              "description": "GPU 目前已用顯存",
+              "name": "GPU 已用顯存"
             }
           },
           "temperature": {
-            "name": "GPU 溫度",
-            "description": "GPU 溫度"
-          }
-        },
-        "memory": {
-          "used": {
-            "name": "已用記憶體",
-            "description": "目前已用記憶體"
+            "description": "GPU 溫度",
+            "name": "GPU 溫度"
           },
-          "total": {
-            "name": "總記憶體",
-            "description": "記憶體總容量"
-          }
-        },
-        "swap": {
-          "used": {
-            "name": "已用交換空間",
-            "description": "目前已用交換空間"
-          },
-          "total": {
-            "name": "總交換空間",
-            "description": "交換空間總容量"
+          "usage": {
+            "description": "節點級平均 GPU 使用率百分比",
+            "name": "GPU 使用率"
           }
         },
         "load": {
           "average": {
-            "name": "系統負載",
-            "description": "系統負載平均值"
+            "description": "系統負載平均值",
+            "name": "系統負載"
           }
         },
-        "temperature": {
-          "name": "系統溫度",
-          "description": "系統溫度"
-        },
-        "disk": {
-          "used": {
-            "name": "已用磁碟",
-            "description": "目前已用磁碟空間"
-          },
+        "memory": {
           "total": {
-            "name": "總磁碟",
-            "description": "磁碟總容量"
+            "description": "記憶體總容量",
+            "name": "總記憶體"
+          },
+          "used": {
+            "description": "目前已用記憶體",
+            "name": "已用記憶體"
           }
         },
         "net": {
           "in": {
             "rate": {
-              "name": "網路入站速率",
-              "description": "網路入站傳輸速率"
+              "description": "網路入站傳輸速率",
+              "name": "網路入站速率"
             }
           },
           "out": {
             "rate": {
-              "name": "網路出站速率",
-              "description": "網路出站傳輸速率"
+              "description": "網路出站傳輸速率",
+              "name": "網路出站速率"
             }
           },
           "total": {
-            "up": {
-              "name": "累計上傳",
-              "description": "網路累計上傳流量"
-            },
             "down": {
-              "name": "累計下載",
-              "description": "網路累計下載流量"
+              "description": "網路累計下載流量",
+              "name": "累計下載"
+            },
+            "up": {
+              "description": "網路累計上傳流量",
+              "name": "累計上傳"
             }
-          }
-        },
-        "traffic": {
-          "up": {
-            "name": "上傳流量增量",
-            "description": "單次上報週期內的上傳流量增量"
-          },
-          "down": {
-            "name": "下載流量增量",
-            "description": "單次上報週期內的下載流量增量"
-          }
-        },
-        "process": {
-          "count": {
-            "name": "行程數量",
-            "description": "正在執行的行程數量"
-          }
-        },
-        "connections": {
-          "tcp": {
-            "name": "TCP 連線數",
-            "description": "TCP 連線數量"
-          },
-          "udp": {
-            "name": "UDP 連線數",
-            "description": "UDP 連線數量"
           }
         },
         "ping": {
           "latency_ms": {
-            "name": "Ping 延遲",
-            "description": "Ping 延遲，單位毫秒"
+            "description": "Ping 延遲，單位毫秒",
+            "name": "Ping 延遲"
+          }
+        },
+        "process": {
+          "count": {
+            "description": "正在執行的行程數量",
+            "name": "行程數量"
+          }
+        },
+        "swap": {
+          "total": {
+            "description": "交換空間總容量",
+            "name": "總交換空間"
+          },
+          "used": {
+            "description": "目前已用交換空間",
+            "name": "已用交換空間"
+          }
+        },
+        "temperature": {
+          "description": "系統溫度",
+          "name": "系統溫度"
+        },
+        "traffic": {
+          "down": {
+            "description": "單次上報週期內的下載流量增量",
+            "name": "下載流量增量"
+          },
+          "up": {
+            "description": "單次上報週期內的上傳流量增量",
+            "name": "上傳流量增量"
           }
         }
-      }
+      },
+      "table_prefix_description": "監控表名前綴，預設 metric_",
+      "table_prefix_title": "表名前綴",
+      "title": "監控資料庫",
+      "low_resource_description": "啟用後，Komari 將降低資料的取樣頻率，節省資源佔用。",
+      "low_resource_enabled": "啟用",
+      "low_resource_title": "低資源模式",
+      "downsampling_description": "啟用後，原始取樣保留 15 分鐘，歷史資料依 1 分鐘、5 分鐘及 1 小時分層彙總。關閉後不再產生降採樣資料，原始取樣依各指標的保留天數清理；已清理的原始資料不會恢復。",
+      "downsampling_enabled": "啟用",
+      "metric_description": "描述",
+      "metric_type": "類型"
     },
     "missing_required_fields": "請填寫必填字段: {{fieldNames}}",
     "notification": {
@@ -887,6 +1486,19 @@
       "provider_fields": "發送設置",
       "provider_fields_description": "詳細設置您選擇的信息發送渠道",
       "provider_settings_fetch_failed": "加載通知設置失敗",
+      "channel_unavailable": "目前通知渠道未註冊。",
+      "unavailable": "不可用",
+      "telegram": {
+        "bot_token": "Telegram Bot Token",
+        "chat_id": "Chat ID",
+        "endpoint": "請求端點",
+        "endpoint_help": "Telegram Bot API 的請求端點，通常為 `https://api.telegram.org/bot`"
+      },
+      "template": "消息通知模板",
+      "template_description": "Komari 將按照消息通知模板發送通知",
+      "test_description": "發送測試消息",
+      "test_title": "發送測試消息",
+      "title": "通知",
       "smtp_description": "配置 SMTP 郵箱信息以發送郵件通知。",
       "smtp_host": "SMTP 伺服器",
       "smtp_password": "密碼",
@@ -897,22 +1509,11 @@
       "smtp_tips": "請先測試執行 Komari 的伺服器 IP 是否能傳送郵件，可使用 \"{{command}}\" 進行測試。",
       "smtp_title": "SMTP 配置",
       "smtp_username": "使用者名稱",
-      "telegram": {
-        "bot_token": "Telegram Bot Token",
-        "chat_id": "Chat ID",
-        "endpoint": "請求端點",
-        "endpoint_help": "Telegram Bot API 的請求端點，通常為 `https://api.telegram.org/bot`"
-      },
       "telegram_bot_token": "Telegram 機器人令牌",
       "telegram_chat_id_error": "Chat ID 不可為空",
       "telegram_description": "配置您的 Telegram 機器人以在聊天中直接接收提醒。",
       "telegram_endpoint": "請求端點",
-      "telegram_title": "Telegram 配置",
-      "template": "消息通知模板",
-      "template_description": "Komari 將按照消息通知模板發送通知",
-      "test_description": "發送測試消息",
-      "test_title": "發送測試消息",
-      "title": "通知"
+      "telegram_title": "Telegram 配置"
     },
     "settings_save_failed": "保存設置失敗",
     "settings_saved": "設置已保存",
@@ -928,7 +1529,6 @@
       "backup_restore_description": "從文件恢復備份，將覆蓋當前資料。",
       "backup_restore_error": "恢復備份失敗",
       "cors_allowed_origins": "API CORS 允許列表",
-      "cors_allowed_origins_description": "每行或用逗號分隔一個 Origin，例如 https://example.com",
       "cors_origin_check_enabled": "CORS 跨域請求校驗",
       "cors_origin_check_enabled_description": "開啟後 API 請求只允許同源或允許列表中的地址",
       "custom": "自定義",
@@ -936,28 +1536,35 @@
       "description_description": "設置網站描述，用於元信息及社交媒體卡片。",
       "name": "站點名稱",
       "name_description": "設定站點名稱",
+      "origins_list_description": "每行或用逗號分隔一個 Origin，例如 https://example.com",
       "private_site": "私有站點",
       "private_site_description": "將站點設定為私有，開啟後資料都需要登陸後才能獲取。",
       "script_domain": "Agent 連接地址",
       "script_domain_description": "為安裝指令碼定義面板的連線地址，方便多個域名的使用者，並不會影響其他域名的訪問。留空使用當前域名。",
       "send_ip_addr_to_guest": "向訪客顯示部分IP地址",
       "send_ip_addr_to_guest_description": "未登入的情況下可以透過 common:getNodes 查看部分IP地址資訊，形如 9.*.*.* / fe80:*:*:*:*:*:*:*。用於部分主題展示IP。",
+      "ssrf_protection_enabled": "啟用 SSRF 防護",
+      "ssrf_protection_enabled_description": "啟用後，主題市場和外掛市場下載、主題遠端匯入與更新會攔截內網、本機及其他非公開網路位址（包括重新導向目標），防止 SSRF。停用後不會進行此位址檢查。",
+      "temporary_share": "臨時分享",
+      "temporary_share_current_link": "當前臨時訪問連結",
+      "temporary_share_description": "開啟私有站點後，可以透過臨時分享連結訪問站點。",
+      "temporary_share_hours": "分享時長（小時）",
+      "temporary_share_revoke": "撤銷訪問許可",
+      "title": "站點",
+      "ws_allowed_origins": "WebSocket Origin 允許列表",
+      "ws_origin_check_enabled": "WebSocket Origin 校驗",
+      "ws_origin_check_enabled_description": "開啟後 WebSocket 請求只允許同源或允許列表中的 Origin",
+      "cors_allowed_origins_description": "每行或用逗號分隔一個 Origin，例如 https://example.com",
       "tempory_share": "臨時分享",
       "tempory_share_current_link": "當前臨時訪問鏈接",
       "tempory_share_description": "開啟私有站點後，可以通過臨時分享鏈接訪問站點。",
       "tempory_share_hours": "分享時長（小時）",
       "tempory_share_revoke": "撤銷訪問許可",
-      "title": "站點",
-      "ws_allowed_origins": "WebSocket Origin 允許列表",
-      "ws_allowed_origins_description": "每行或用逗號分隔一個 Origin，例如 https://example.com",
-      "ws_origin_check_enabled": "WebSocket Origin 校驗",
-      "ws_origin_check_enabled_description": "開啟後 WebSocket 請求只允許同源或允許列表中的 Origin"
+      "ws_allowed_origins_description": "每行或用逗號分隔一個 Origin，例如 https://example.com"
     },
     "sso": {
       "callback_url_tips": "回調地址：{{url}}",
-      "client_id": "客戶端 ID",
       "client_id_description": "OAuth 應用的客戶端 ID",
-      "client_secret": "客戶端密鑰",
       "client_secret_description": "OAuth 應用的客戶端密鑰",
       "enable": "啟用單點登入",
       "enable_description": "允許用戶通過第三方賬戶（如 GitHub）登入",
@@ -974,6 +1581,7 @@
         "client_id": "GitHub 客戶端 ID",
         "client_secret": "GitHub 客戶端密鑰"
       },
+      "not_implemented_suffix": " [暫未實作]",
       "provider": "單點登入提供商",
       "provider_description": "選擇用於單點登入的身份驗證提供商",
       "provider_fetch_failed": "加載登入提供商信息失敗",
@@ -981,7 +1589,9 @@
       "provider_fields_description": "設定您選擇登入方式的詳細資訊",
       "provider_save_failed": "保存登入提供商設置失敗",
       "provider_settings_fetch_failed": "加載登入提供商設置失敗",
-      "title": "單點登入"
+      "title": "單點登入",
+      "client_id": "客戶端 ID",
+      "client_secret": "客戶端密鑰"
     },
     "title": "設置",
     "update_1_2_7": {
@@ -1054,41 +1664,60 @@
     }
   },
   "status_settings": "狀態顯示設置",
-  "terminal": {
-    "disconnect": "連接已斷開",
-    "no_active_connection": "沒有活動連接",
-    "title": "終端"
+  "system": {
+    "title": "系統"
   },
-  "market": {
-    "add_source": "新增來源",
-    "delete_source_confirm": "確定刪除來源 {{name}} 嗎？",
-    "description": "尋找並安裝來自網際網路的主題",
-    "edit_source": "編輯來源",
-    "enabled": "啟用",
-    "install": "安裝",
-    "install_unavailable": "暫無安裝包",
-    "install_success": "主題安裝成功",
-    "installed": "已安裝",
-    "installed_version": "已安裝 v{{version}}",
-    "manage_sources": "管理來源",
-    "no_sources": "尚未設定來源",
-    "no_themes": "找不到主題",
-    "project_page": "專案首頁",
-    "refresh": "重新整理",
-    "refresh_success": "主題來源已重新整理",
-    "search_placeholder": "搜尋主題、作者或來源",
-    "source": "來源",
-    "source_created": "來源已新增",
-    "source_deleted": "來源已刪除",
-    "source_name": "來源名稱",
-    "source_updated": "來源已更新",
-    "themes": "主題市場",
-    "title": "市場",
-    "update": "更新",
-    "update_available": "有可用更新",
-    "uninstall": "解除安裝",
-    "uninstall_confirm": "確定解除安裝 {{name}} 嗎？",
-    "uninstall_success": "主題已解除安裝"
+  "terminal": {
+    "2fa_code_prompt": "請輸入 2FA 驗證碼: ",
+    "2fa_prompt": "需要雙因素認證。",
+    "clients_load_failed": "伺服器載入失敗",
+    "close_others": "其他",
+    "close_tab": "關閉分頁",
+    "close_tabs": "關閉",
+    "close_to_left": "左側",
+    "close_to_right": "右側",
+    "color_tab": "變更分頁顏色",
+    "default_color": "預設顏色",
+    "disconnect": "連接已斷開",
+    "duplicate_tab": "複製分頁",
+    "export_text": "匯出文字",
+    "find": "尋找",
+    "no_active_connection": "沒有活動連接",
+    "otp_invalid": "2FA 驗證碼無效或已過期",
+    "reconnecting": "連線中斷，正在重新連線...",
+    "rename_tab": "重新命名分頁",
+    "resource_monitor": {
+      "close": "隱藏資源小窗",
+      "load_error": "即時資料載入失敗",
+      "open": "顯示資源小窗",
+      "title": "資源小窗",
+      "waiting": "正在等待資料..."
+    },
+    "search": {
+      "close": "關閉",
+      "match_case": "區分大小寫",
+      "next": "下一個",
+      "placeholder": "尋找",
+      "prev": "上一個",
+      "use_regex": "規則運算式"
+    },
+    "server": "伺服器",
+    "tabs": {
+      "choose_server": "選擇伺服器",
+      "connecting": "連線中...",
+      "empty_action": "連線到伺服器",
+      "empty_title": "暫無連接到的伺服器",
+      "loading_servers": "正在載入伺服器...",
+      "new_tab": "新增分頁",
+      "no_servers": "沒有可用的伺服器",
+      "open_terminal": "開啟終端",
+      "open_workbench": "開啟工作臺",
+      "scroll_left": "向左捲動分頁",
+      "scroll_right": "向右捲動分頁",
+      "title": "終端分頁"
+    },
+    "title": "終端",
+    "title_with_sessions": "終端 - {{name}}（{{count}} 個工作階段）"
   },
   "theme": {
     "active": "當前使用",
@@ -1099,10 +1728,10 @@
     "default_no_config": "預設主題沒有可配置選項。",
     "default_preview": "預設主題無預覽",
     "default_theme": "預設主題",
+    "delete_active_warning": "主題「{{themeName}}」正在使用。繼續刪除將切換至預設主題，並刪除此主題。此操作無法復原。",
     "delete_failed": "主題刪除失敗",
     "delete_success": "主題刪除成功",
     "delete_warning": "您確定要刪除主題 \"{{themeName}}\" 嗎？此操作不可撤銷。",
-    "description": "描述",
     "drag_drop": "拖拽檔案到此處",
     "find_more": "查找更多主題？",
     "github_description": "系統將從該GitHub倉庫下載最新的發布版本。",
@@ -1121,8 +1750,8 @@
     "invalid_file_type": "無效的文件類型，僅支持 .zip 格式",
     "light": "淺色",
     "load_config_failed": "加載主題配置失敗",
-    "manage": "主題管理",
     "manage_with_name": "{{name}} 主題管理",
+    "menu": "主題",
     "name": "名稱",
     "no_config": "該主題沒有聲明配置項。",
     "no_themes": "暫無主題",
@@ -1130,6 +1759,7 @@
     "set_active": "設為當前主題",
     "set_failed": "主題設置失敗",
     "set_success": "主題設置成功",
+    "settings_with_name": "{{name}}設定",
     "system": "跟隨系統",
     "theme_url": "主題URL",
     "title": "主題管理",
@@ -1142,17 +1772,20 @@
     "update_mode_github": "GitHub發布",
     "update_mode_url": "直接URL",
     "update_success": "主題更新成功",
-    "update_theme": "更新主題",
     "upload": "上傳主題",
+    "upload_413_content_too_large": "檔案上傳失敗 (413)。請檢查並增大您的反向代理伺服器（如 Nginx/CDN）配置中的檔案大小限制（client_max_body_size），確保該值大於您的目標檔案大小。",
     "upload_description": "上傳一個 .zip 格式的主題文件",
     "upload_failed": "主題上傳失敗",
     "upload_first_theme": "上傳您的第一個主題",
     "upload_success": "主題上傳成功",
-    "upload_theme": "上傳主題",
     "uploading": "正在上傳主題...",
-    "uploda_413_content_too_large": "檔案上傳失敗 (413)。請檢查並增大您的反向代理伺服器（如 Nginx/CDN）配置中的檔案大小限制（client_max_body_size），確保該值大於您的目標檔案大小。",
     "version": "版本",
-    "zip_files_only": "僅支持 .zip 格式"
+    "zip_files_only": "僅支持 .zip 格式",
+    "description": "描述",
+    "manage": "主題管理",
+    "update_theme": "更新主題",
+    "upload_theme": "上傳主題",
+    "uploda_413_content_too_large": "檔案上傳失敗 (413)。請檢查並增大您的反向代理伺服器（如 Nginx/CDN）配置中的檔案大小限制（client_max_body_size），確保該值大於您的目標檔案大小。"
   },
   "time": {
     "ago": "前",
@@ -1176,71 +1809,26 @@
   },
   "warn_https": "當前連接不是 HTTPS！您的敏感數據存在嚴重風險。請立即採取措施確保連接安全！複製操作可能無法使用！",
   "warn_websocket": "RPC2 請求失敗，請檢查網絡連接或伺服器狀態！",
-  "database_recovery": {
-    "title": "監控資料庫復原",
-    "subtitle": "目前無法連線到監控資料庫。請登入後更新連線字串。",
-    "history_note": "復原流程只會使用新的 DSN 重新連線，不會從原連線遷移任何資料。",
-    "failure_detail": "資料庫連線已連續失敗 {{count}}/{{max}} 次。",
-    "dsn_required": "請輸入監控資料庫連線字串。",
-    "save": "儲存並重新連線",
-    "saving": "連線中...",
-    "completed_title": "資料庫連線已恢復",
-    "completed_description": "伺服器正在重新啟動一般控制台。",
-    "save_failed": "監控資料庫連線失敗，請檢查連線字串後重試。",
-    "network_error": "無法連線到復原服務。",
-    "request_failed": "要求失敗，請重試。"
+  "cancel": "取消",
+  "close": "關閉",
+  "command_clipboard": {
+    "title": "命令剪貼板"
   },
-  "install": {
-    "title": "安裝精靈",
-    "welcome": "歡迎",
-    "administrator": "管理員",
-    "site": "網站",
-    "database": "資料庫",
-    "confirm": "確認",
-    "welcome_title": "歡迎使用 Komari",
-    "welcome_subtitle": "輕量、開源的伺服器監控工具。",
-    "welcome_description": "設定管理員帳號、網站資訊和監控資料庫。",
-    "admin_title": "建立管理員帳號",
-    "username": "使用者名稱",
-    "password": "密碼",
-    "password_confirm": "確認密碼",
-    "site_title": "網站資訊",
-    "site_hint": "這些內容會顯示在瀏覽器標題和公開頁面中。",
-    "sitename": "網站名稱",
-    "description": "網站說明",
-    "database_title": "監控資料庫",
-    "confirm_title": "確認安裝設定",
-    "summary_admin": "管理員：",
-    "summary_sitename": "網站名稱：",
-    "summary_database": "資料庫：",
-    "summary_dsn": "DSN：",
-    "back": "上一步",
-    "next": "下一步",
-    "start": "開始安裝",
-    "restore": "從備份恢復",
-    "restore_description": "上傳備份檔案會重新啟動服務並恢復其中的資料。",
-    "restore_restarting": "正在重新啟動並恢復備份...",
-    "restore_file_type": "請選擇 .zip 格式的備份檔案。",
-    "restore_failed": "恢復備份失敗，請稍後再試。",
-    "restore_413": "備份上傳失敗（413）。請調整 CDN 或 Nginx 等反向代理的檔案大小限制（例如 client_max_body_size），或手動將備份上傳到 ./data/backup.zip 後重新啟動服務。",
-    "complete": "完成安裝",
-    "completed": "安裝已完成，請返回登入。",
-    "failed": "安裝失敗，請稍後再試。",
-    "connection_error": "無法連線到伺服器",
-    "username_required": "請輸入使用者名稱。",
-    "sitename_required": "請輸入網站名稱。",
-    "dsn_required": "請輸入監控資料庫 DSN。",
-    "detected_database": "目前識別為 {{driver}}。",
-    "sqlite_warning": "SQLite 適合輕量部署；隨著監控資料增長，可能遇到效能瓶頸。需要長期保存大量指標時，建議改用 MariaDB、MySQL 或 PostgreSQL。",
-    "language": "語言",
-    "appearance": "外觀",
-    "color": "色彩",
-    "steps": {
-      "welcome": "歡迎",
-      "administrator": "管理員",
-      "site": "網站",
-      "database": "資料庫",
-      "confirm": "確認"
-    }
-  }
+  "copy": "複製",
+  "delete": "刪除",
+  "home_title": "Komari Monitor",
+  "loadAlert": {
+    "metric": "監控項",
+    "ratio": "時間佔比",
+    "threshold_placeholder": "百分比，例如80代表80%",
+    "title": "負載警報"
+  },
+  "tcp_quality": {
+    "title": "TCP 連線品質"
+  },
+  "unlock_quality": {
+    "title": "解鎖線路品質"
+  },
+  "save": "儲存",
+  "select": "選擇"
 }

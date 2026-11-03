@@ -18,6 +18,7 @@ import {
 import { useTranslation } from "react-i18next";
 
 import GuideHeader from "@/components/GuideHeader";
+import Loading from "@/components/loading";
 import RestrictedLoginDialog, {
   type RestrictedAuthStatus,
 } from "@/components/RestrictedLoginDialog";
@@ -198,9 +199,9 @@ export default function DatabaseRecovery() {
   }, [completed]);
 
   return (
-    <main className="min-h-screen bg-[var(--color-background)] text-[var(--gray-12)]">
+    <main className="km-page-database-recovery min-h-screen bg-[var(--color-background)] text-[var(--gray-12)]">
       <header
-        className="border-b bg-[var(--color-panel-solid)]"
+        className="km-database-recovery-header border-b bg-[var(--color-panel-solid)]"
         style={{ borderColor: "var(--gray-a5)" }}
       >
         <Container size="3" px={{ initial: "4", sm: "6" }} py="3">
@@ -314,10 +315,7 @@ export default function DatabaseRecovery() {
             </Flex>
           ) : authenticated ? (
             <Callout.Root color="gray" variant="surface">
-              <Callout.Icon>
-                <LoaderCircle size={18} className="animate-spin" />
-              </Callout.Icon>
-              <Callout.Text>{t("loading")}</Callout.Text>
+              <Loading compact />
             </Callout.Root>
           ) : null}
         </Flex>
