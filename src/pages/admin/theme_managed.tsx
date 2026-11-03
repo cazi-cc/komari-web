@@ -1,14 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Flex, Heading, Callout, Separator, Button } from "@radix-ui/themes";
+import { Flex, Heading, Callout, Button } from "@radix-ui/themes";
 import { usePublicInfo } from "@/contexts/PublicInfoContext";
-import {
-  SettingCardSelect,
-  SettingCardSwitch,
-  SettingCardShortTextInput,
-  SettingCardLongTextInput,
-} from "@/components/admin/SettingCard";
+import ConfigFormTabs from "@/components/admin/ConfigFormTabs";
 import { toast } from "sonner";
 import Loading from "@/components/loading";
+import { saveThemeSettings } from "@/utils/saveThemeSettings";
 import { useTranslation } from "react-i18next";
 import { resolveI18nText, type I18nText } from "@/utils/i18nText";
 import {
@@ -20,7 +16,16 @@ import {
 interface ThemeFieldBase {
   name?: I18nText; // 显示名（字符串或多语言字典）
   help?: I18nText; // 帮助文本（字符串或多语言字典）
-  type: "title" | "switch" | "select" | "number" | "string" | "richtext";
+  type:
+    | "title"
+    | "textbox"
+    | "switch"
+    | "select"
+    | "number"
+    | "string"
+    | "richtext"
+    | "nodes"
+    | "pingtasks";
   key?: string; // 对应设置键（title 无需）
   default?: any; // 默认值
   options?: string; // 仅 select 支持，逗号分隔
@@ -81,11 +86,16 @@ const ThemeManaged: React.FC = () => {
         // 初始值：优先 publicInfo.theme_settings，其次 default
         const init: Record<string, any> = {};
         ds.forEach((f) => {
-          if (f.type !== "title" && f.key) {
+          if (f.type !== "title" && f.type !== "textbox" && f.key) {
+            const selection = f.type === "nodes" || f.type === "pingtasks";
+            const saved = themeSettings?.[f.key];
             init[f.key] =
-              themeSettings && themeSettings[f.key] !== undefined
-                ? themeSettings[f.key]
-                : f.default;
+              saved !== undefined
+                ? selection
+                  ? JSON.stringify(saved)
+                  : saved
+                : f.default ??
+                  (selection ? "[]" : undefined);
           }
         });
         setValues(init);
@@ -107,7 +117,7 @@ const ThemeManaged: React.FC = () => {
     // 全量：对所有字段（非 title）输出当前值
     const obj: Record<string, any> = {};
     fields.forEach((f) => {
-      if (f.type === "title" || !f.key) return;
+      if (f.type === "title" || f.type === "textbox" || !f.key) return;
       const current = values[f.key];
       // 直接使用当前值，undefined 时才用默认值
       if (current !== undefined) {
@@ -115,7 +125,8 @@ const ThemeManaged: React.FC = () => {
       } else if (f.default !== undefined) {
         obj[f.key] = f.default;
       } else {
-        obj[f.key] = "";
+        obj[f.key] =
+          f.type === "nodes" || f.type === "pingtasks" ? "[]" : "";
       }
     });
     return obj;
@@ -127,18 +138,7 @@ const ThemeManaged: React.FC = () => {
     console.log("保存前的 payload:", payload);
     setSaving(true);
     try {
-      const resp = await fetch(
-        `/api/admin/theme/settings?theme=${encodeURIComponent(theme)}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        },
-      );
-      if (!resp.ok) {
-        const d = await resp.json().catch(() => ({ message: "unknown" }));
-        throw new Error(d.message || `HTTP ${resp.status}`);
-      }
+      await saveThemeSettings(theme, payload);
       toast.success(t("settings.settings_saved"));
       // 刷新 publicInfo 以反映最新设置
       refresh();
@@ -150,21 +150,11 @@ const ThemeManaged: React.FC = () => {
   };
 
   return (
-    <Flex direction="column" gap="4" className="p-2 md:p-4">
-      <Flex justify="between" align="center">
-        <Heading size="4">
-          {theme
-            ? t("theme.manage_with_name", {
-                name: theme === "default" ? "" : theme,
-              })
-            : t("theme.manage")}
-        </Heading>
-        {fields.length > 0 && (
-          <Button onClick={saveAll} disabled={saving}>
-            {t("common.save")}
-          </Button>
-        )}
-      </Flex>
+    <Flex
+      direction="column"
+      gap="4"
+      className="km-page-admin-theme-managed h-full min-h-0 p-2 md:p-4"
+    >
       {error && (
         <Callout.Root color="red">
           <Callout.Text>{error}</Callout.Text>
@@ -176,101 +166,44 @@ const ThemeManaged: React.FC = () => {
           <Callout.Text>{t("theme.no_config")}</Callout.Text>
         </Callout.Root>
       )}
-      <Separator size="4" />
-      <Flex direction="column" gap="3">
-        {fields.map((f, idx) => {
-          if (f.type === "title") {
-            return (
-              <Heading key={idx} size="3" className="mt-4">
-                {resolveI18nText(f.name, currentLanguage) || t("common.title")}
+      {fields.length > 0 ? (
+        <ConfigFormTabs
+          items={fields}
+          values={values}
+          onValueChange={handleValueChange}
+          resolveText={(v) => resolveI18nText(v, currentLanguage)}
+          className="km-admin-theme-managed-config min-h-0 flex-1"
+          formClassName="km-theme-managed-form"
+          header={
+            <Flex justify="between" align="center" wrap="wrap" gap="3">
+              <Heading size="4">
+                {theme
+                  ? t("theme.manage_with_name", {
+                      name: theme === "default" ? "" : theme,
+                    })
+                  : t("theme.title")}
               </Heading>
-            );
+              <Button onClick={saveAll} disabled={saving}>
+                {t("common.save")}
+              </Button>
+            </Flex>
           }
-          if (!f.key) return null;
-          const val = values[f.key];
-          const title = resolveI18nText(f.name, currentLanguage);
-          const description = resolveI18nText(f.help, currentLanguage);
-          switch (f.type) {
-            case "switch":
-              return (
-                <SettingCardSwitch
-                  key={f.key}
-                  title={title}
-                  description={description}
-                  defaultChecked={!!val}
-                  onChange={(checked) => handleValueChange(f.key!, checked)}
-                />
-              );
-            case "select": {
-              const opts = (f.options || "")
-                .split(",")
-                .map((s) => s.trim())
-                .filter(Boolean)
-                .map((o) => ({ value: o }));
-              return (
-                <SettingCardSelect
-                  key={f.key}
-                  title={title}
-                  description={description}
-                  value={val}
-                  options={opts}
-                  OnSave={(v) => handleValueChange(f.key!, v)}
-                  label={val || t("common.select")}
-                />
-              );
-            }
-            case "number":
-              return (
-                <SettingCardShortTextInput
-                  key={f.key}
-                  title={title}
-                  description={description}
-                  type="number"
-                  showSaveButton={false}
-                  value={val !== undefined ? String(val) : ""}
-                  onChange={(e) =>
-                    handleValueChange(
-                      f.key!,
-                      e.target.value === ""
-                        ? undefined
-                        : Number(e.target.value),
-                    )
-                  }
-                />
-              );
-            case "richtext":
-              return (
-                <SettingCardLongTextInput
-                  key={f.key}
-                  title={title}
-                  description={description}
-                  defaultValue={val !== undefined ? String(val) : ""}
-                  showSaveButton={false}
-                  onChange={(e) => handleValueChange(f.key!, e.target.value)}
-                />
-              );
-            case "string":
-            default:
-              return (
-                <SettingCardShortTextInput
-                  key={f.key}
-                  title={title}
-                  description={description}
-                  value={val !== undefined ? String(val) : ""}
-                  required={f.required}
-                  showSaveButton={false}
-                  onChange={(e) => handleValueChange(f.key!, e.target.value)}
-                />
-              );
+          footer={
+            <Flex className="mt-4">
+              <Button onClick={saveAll} disabled={saving}>
+                {t("common.save")}
+              </Button>
+            </Flex>
           }
-        })}
-      </Flex>
-      {fields.length > 0 && (
-        <Flex>
-          <Button onClick={saveAll} disabled={saving}>
-            {t("common.save")}
-          </Button>
-        </Flex>
+        />
+      ) : (
+        <Heading size="4">
+          {theme
+            ? t("theme.manage_with_name", {
+                name: theme === "default" ? "" : theme,
+              })
+            : t("theme.title")}
+        </Heading>
       )}
     </Flex>
   );

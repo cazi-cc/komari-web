@@ -95,7 +95,6 @@ const MiniPingChart = ({
         metric_keys: [PING_LATENCY_METRIC],
         entity_id: uuid,
         hours,
-        downsample: true,
         max_points: 240,
         aggregation: "avg",
         fill_empty: true,
@@ -235,7 +234,7 @@ const MiniPingChart = ({
   return (
     <Card
       style={{ width, height }}
-      className="flex min-h-0 flex-col gap-2 overflow-hidden"
+      className="km-mini-ping-chart flex min-h-0 flex-col gap-2 overflow-hidden"
     >
       {loading && (
         <div className="flex min-h-0 flex-1 items-center justify-center">
@@ -302,12 +301,12 @@ const MiniPingChart = ({
 
           <ChartContainer
             config={chartConfig}
-            className="min-h-0 h-10/12 w-full flex-1"
+            className="km-mini-ping-chart-canvas min-h-0 h-10/12 w-full flex-1"
           >
             <LineChart
               data={chartData}
               accessibilityLayer
-              margin={{ top: 8, right: 16, bottom: 0, left: 16 }}
+              margin={{ top: 16, right: 8, bottom: 4, left: 8 }}
             >
               <CartesianGrid vertical={false} />
               <XAxis
@@ -322,12 +321,13 @@ const MiniPingChart = ({
               <YAxis
                 tickLine={false}
                 axisLine={false}
-                unit="ms"
                 allowDecimals={false}
                 orientation="left"
                 type="number"
-                tick={{ dx: -10 }}
+                width={1}
                 mirror
+                tick={{ dx: 8 }}
+                tickFormatter={(value) => `${value}\u00a0ms`}
               />
               <ChartTooltip
                 cursor={false}

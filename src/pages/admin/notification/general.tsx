@@ -22,7 +22,7 @@ const GeneralNotification = () => {
   const enabledByDefault = (key: string) => settings[key] !== false;
 
   return (
-    <Flex direction="column" gap="4" className="p-1 md:p-4">
+    <Flex direction="column" gap="4" className="km-page-admin-notification-general km-notification-general-form p-1 md:p-4">
       <Flex align="center" gap="2">
         <BellRing size={22} />
         <div>

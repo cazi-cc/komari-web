@@ -51,7 +51,7 @@ const InnerLayout = () => {
     return <div>{error || nodeDetailError}</div>;
   }
   return (
-    <Flex direction="column" gap="4" className="p-4">
+    <Flex direction="column" gap="4" className="km-page-admin-pingtask p-4">
       <div className="flex flex-wrap justify-between items-center gap-3">
         <label className="text-2xl font-bold">{t("ping.title")}</label>
         <Flex gap="2" wrap="wrap">
@@ -75,16 +75,16 @@ const InnerLayout = () => {
           可以直接使用 30、60 等常规整数间隔。系统会自动错峰下发，Agent 也会限制探测并发，无需手动填写 51、58、59 秒来避峰。
         </Callout.Text>
       </Callout.Root>
-      <Tabs.Root defaultValue="task">
+      <Tabs.Root defaultValue="task" className="km-pingtask-nav">
         <Tabs.List>
           <Tabs.Trigger value="task">{t("ping.task_view")}</Tabs.Trigger>
           <Tabs.Trigger value="server">{t("ping.server_view")}</Tabs.Trigger>
         </Tabs.List>
         <Box pt="3">
-          <Tabs.Content value="task">
+          <Tabs.Content value="task" className="km-pingtask-view">
             <TaskView pingTasks={pingTasks ?? []} />
           </Tabs.Content>
-          <Tabs.Content value="server">
+          <Tabs.Content value="server" className="km-pingtask-view">
             <ServerView pingTasks={pingTasks ?? []} />
           </Tabs.Content>
         </Box>
@@ -163,7 +163,7 @@ const AddButton: React.FC = () => {
           <Flex direction="column" justify="end" gap="2" className="font-bold">
             <label htmlFor="ping_name">{t("common.name")}</label>
             <TextField.Root id="ping_name" name="ping_name" />
-            <label htmlFor="type">{t("ping.type")}</label>
+            <label htmlFor="type">{t("common.type")}</label>
             <Select.Root
               value={selectedType}
               onValueChange={(value) =>

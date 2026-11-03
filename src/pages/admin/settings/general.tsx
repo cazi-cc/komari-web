@@ -13,7 +13,6 @@ import {
   SettingCardShortTextInput,
   SettingCardSwitch,
 } from "@/components/admin/SettingCard";
-import { DatabaseMaintenanceCard } from "@/components/admin/DatabaseMaintenanceCard";
 import React from "react";
 import { toast } from "sonner";
 import Loading from "@/components/loading";
@@ -25,7 +24,7 @@ export default function GeneralSettings() {
     null
   );
   if (loading) {
-    return <Loading text="creeper?" />;
+    return <Loading />;
   }
 
   if (error) {
@@ -46,6 +45,7 @@ export default function GeneralSettings() {
         onChange={async (checked) => {
           await updateSettingsWithToast({ geo_ip_enabled: checked }, t);
         }}
+        className="km-page-admin-settings-general km-setting-card"
       />
       <SettingCardSelect
         title={t("settings.geoip.provider_title")}
@@ -77,6 +77,7 @@ export default function GeneralSettings() {
             );
           }
         }}
+        className="km-setting-card"
       >
         {t("common.update")}
       </SettingCardButton>
@@ -117,8 +118,6 @@ export default function GeneralSettings() {
           </Flex>
         </Flex>
       </SettingCardCollapse>
-      <SettingCardLabel>{t("settings.database.title")}</SettingCardLabel>
-      <DatabaseMaintenanceCard />
     </>
   );
 }

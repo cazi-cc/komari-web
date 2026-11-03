@@ -1,4 +1,7 @@
 import { Cross1Icon, ExitIcon } from "@radix-ui/react-icons";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import "github-markdown-css/github-markdown.css";
 import {
   Button,
   Callout,
@@ -8,7 +11,7 @@ import {
   Text,
 } from "@radix-ui/themes";
 import { AnimatePresence, motion, type Variants } from "framer-motion"; // 引入 Framer Motion
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation /*useNavigate*/ } from "react-router-dom";
 import ColorSwitch from "../ColorSwitch";
@@ -17,16 +20,19 @@ import ThemeSwitch from "../ThemeSwitch";
 import { useIsMobile } from "@/hooks/use-mobile";
 import menuConfig from "../../config/menuConfig.json";
 import type { MenuItem } from "../../types/menu";
-import { iconMap } from "../../utils/iconHelper";
+import { iconMap, resolvePluginIcon } from "../../utils/iconHelper";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { TablerMenu2 } from "../Icones/Tabler";
-import LoginDialog from "../Login";
-import { useAccount } from "@/contexts/AccountContext";
+import InlineSvgIcon from "../InlineSvgIcon";
+import { useAdminNavigation } from "@/contexts/AdminNavigationContext";
 import { usePublicInfo } from "@/contexts/PublicInfoContext";
 import Tips from "../ui/tips";
 import { CircleFadingArrowUp } from "lucide-react";
 import { useRPC2Call } from "@/contexts/RPC2Context";
 import { resolveI18nText } from "@/utils/i18nText";
+import type { PluginInfo } from "@/types/plugin";
+import GuidedTour from "@/components/onboarding/GuidedTour";
+import { useAdminGuide } from "@/components/onboarding/useAdminGuide";
 import {
   getThemeConfigurationType,
   normalizeThemeRedirectTarget,
@@ -46,20 +52,55 @@ interface ExtendedMenuItem extends MenuItem {
 
 interface AdminPanelBarProps {
   content: ReactNode;
+  onboardingReady?: boolean;
 }
 
-const AdminPanelBar = ({ content }: AdminPanelBarProps) => {
+const AdminPanelBar = ({ content, onboardingReady = false }: AdminPanelBarProps) => {
   const { call } = useRPC2Call();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [openSubMenus, setOpenSubMenus] = useState<{ [key: string]: boolean }>({
-    // 默认所有子菜单关闭
+  const [openSubMenus, setOpenSubMenus] = useState<Record<string, boolean>>(() => {
+    try {
+      const stored: unknown = JSON.parse(localStorage.getItem("komari.admin.submenus") || "{}");
+      if (!stored || typeof stored !== "object" || Array.isArray(stored)) return {};
+      return Object.fromEntries(Object.entries(stored).filter(([, value]) => typeof value === "boolean"));
+    } catch {
+      return {};
+    }
   });
-  const { account } = useAccount();
+  const previousMenuRoute = useRef<string | null>(null);
+  const initializedMenuGroups = useRef(new Set<string>());
   const isMobile = useIsMobile();
   const ishttps = window.location.protocol === "https:";
   const [t, i18n] = useTranslation();
   const location = useLocation();
+  const onboarding = useAdminGuide(onboardingReady);
+  const sidebarBeforeGuide = useRef<{
+    open: boolean;
+    subMenus: Record<string, boolean>;
+  } | null>(null);
+  useEffect(() => {
+    if (onboarding.guide) {
+      if (!sidebarBeforeGuide.current) {
+        sidebarBeforeGuide.current = { open: sidebarOpen, subMenus: openSubMenus };
+      }
+      const needsSidebar = !(onboarding.guide === "install" && onboarding.step === 1);
+      setSidebarOpen(needsSidebar || !isMobile);
+      if (onboarding.menu) {
+        setOpenSubMenus((previous) => ({ ...previous, [onboarding.menu!]: true }));
+      }
+    } else if (sidebarBeforeGuide.current) {
+      setSidebarOpen(sidebarBeforeGuide.current.open);
+      setOpenSubMenus(sidebarBeforeGuide.current.subMenus);
+      sidebarBeforeGuide.current = null;
+    }
+    // Capture navigation state once before temporarily revealing guide targets.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [onboarding.guide, onboarding.step, onboarding.menu, isMobile]);
+  const isConfigFormPage =
+    location.pathname === "/admin/theme_managed" ||
+    location.pathname === "/admin/plugins/config";
   const { publicInfo } = usePublicInfo();
+  const { refreshVersion } = useAdminNavigation();
   //const navigate = useNavigate();
   // 获取版本信息
   const [versionInfo, setVersionInfo] = useState<{
@@ -88,8 +129,9 @@ const AdminPanelBar = ({ content }: AdminPanelBarProps) => {
 
   const currentTheme = publicInfo?.theme;
 
-  // 动态扩展菜单
+  // 动态扩展菜单（主题 + 插件注入页面）
   const [extraMenuItems, setExtraMenuItems] = useState<ExtendedMenuItem[]>([]);
+  const [pluginMenuItems, setPluginMenuItems] = useState<ExtendedMenuItem[]>([]);
 
   useEffect(() => {
     let ignore = false;
@@ -135,7 +177,7 @@ const AdminPanelBar = ({ content }: AdminPanelBarProps) => {
           t("theme.manage_with_name", {
             name: currentTheme === "default" ? "" : currentTheme,
           });
-        const icon: string = cfg.icon || "Palette"; // fallback icon
+        const icon: string = cfg.icon || "Settings2"; // fallback icon
         const item: ExtendedMenuItem = {
           labelKey: rawLabel,
           rawLabel,
@@ -153,7 +195,59 @@ const AdminPanelBar = ({ content }: AdminPanelBarProps) => {
     return () => {
       ignore = true;
     };
-  }, [currentTheme]);
+  }, [currentTheme, refreshVersion]);
+  // 插件注入的管理页面：manifest pages（visibility=admin）-> 插件菜单的二级菜单。
+  // iframe 页面进入 plugin-page 路由；redirect 页面复用主题的站内跳转校验。
+  useEffect(() => {
+    let ignore = false;
+    async function loadPluginMenu() {
+      try {
+        const result = await call<any, PluginInfo[]>("admin:listPlugins");
+        if (ignore || !Array.isArray(result)) return;
+        const pluginIconUrl = (plugin: PluginInfo, icon?: string) =>
+          resolvePluginIcon(plugin.short, icon) || "Blocks";
+        const items: ExtendedMenuItem[] = [];
+        for (const plugin of result) {
+          if (!plugin.enabled) continue; // 未启用的插件不注入导航菜单
+          for (const page of plugin.pages || []) {
+            if (page.visibility === "public") continue; // 公开页面走公开路由，不进后台导航
+            const label =
+              resolveI18nText(page.title, currentLanguage) ||
+              resolveI18nText(plugin.name, currentLanguage) ||
+              plugin.short;
+            const pageType = page.type || "iframe";
+            if (pageType === "redirect") {
+              const target = normalizeThemeRedirectTarget(page.url);
+              if (!target) continue;
+              items.push({
+                labelKey: label,
+                rawLabel: label,
+                path: target,
+                icon: pluginIconUrl(plugin, page.icon),
+                reloadDocument: true, // 与主题 redirect 一致：整页跳转到站内路径
+              });
+              continue;
+            }
+            items.push({
+              labelKey: label,
+              rawLabel: label,
+              path: `/admin/plugin-page?short=${encodeURIComponent(plugin.short)}&file=${encodeURIComponent(page.file || "")}`,
+              icon: pluginIconUrl(plugin, page.icon),
+            });
+          }
+        }
+        if (!ignore) setPluginMenuItems(items);
+      } catch (e) {
+        console.warn("加载插件菜单失败:", e);
+        if (!ignore) setPluginMenuItems([]);
+      }
+    }
+    loadPluginMenu();
+    return () => {
+      ignore = true;
+    };
+  }, [call, currentLanguage, refreshVersion]);
+
   useEffect(() => {
     const fetchVersionInfo = async () => {
       try {
@@ -242,21 +336,68 @@ const AdminPanelBar = ({ content }: AdminPanelBarProps) => {
     return () => window.removeEventListener("resize", handleResize);
   }, [isMobile]);
 
-  // 根据路径自动展开子菜单（包含动态扩展项）
-  useEffect(() => {
-    const newState: { [key: string]: boolean } = {};
-    const combined: ExtendedMenuItem[] = [...baseMenuItems, ...extraMenuItems];
-    combined.forEach((item) => {
-      if (item.children) {
-        newState[item.path] = item.children.some(
-          (child: MenuItem) =>
-            location.pathname === child.path ||
-            location.pathname.startsWith(child.path),
-        );
+  // 外观与插件保留管理入口；插件自定义页面使用独立的插件功能菜单。
+  const mergedBaseMenuItems: ExtendedMenuItem[] = useMemo(() => {
+    return baseMenuItems.flatMap((item): ExtendedMenuItem[] => {
+      if (item.labelKey === "adminNavigation.extensions") {
+        const children = item.children || [];
+        return [
+          {
+            ...item,
+            children: [
+              ...children.filter((child) => !child.path.includes("/plugins")),
+              ...extraMenuItems,
+              ...children.filter((child) => child.path.includes("/plugins")),
+            ],
+          },
+          ...(pluginMenuItems.length > 0
+            ? [{
+                labelKey: "adminNavigation.pluginFeatures",
+                path: "/admin/plugin-page",
+                icon: "PanelsTopLeft",
+                children: pluginMenuItems,
+              }]
+            : []),
+        ];
       }
+      return [item];
     });
-    setOpenSubMenus(newState);
-  }, [location.pathname, extraMenuItems]);
+  }, [extraMenuItems, pluginMenuItems]);
+  const bottomStartPath = mergedBaseMenuItems.find(
+    (item) => item.bottom,
+  )?.path;
+
+  // 菜单刷新保留手动状态；首次加载或路由切换时展开当前页面所在分组。
+  useEffect(() => {
+    const route = location.pathname + location.search;
+    const routeChanged = previousMenuRoute.current !== route;
+    previousMenuRoute.current = route;
+    const groups = mergedBaseMenuItems.filter((item) => item.children?.length);
+    const newGroups = new Set(groups.filter((item) => !initializedMenuGroups.current.has(item.path)).map((item) => item.path));
+    groups.forEach((item) => initializedMenuGroups.current.add(item.path));
+    setOpenSubMenus((previous) => {
+      const next = { ...previous };
+      for (const item of groups) {
+        const active = item.children!.some((child) => {
+          if (child.path.includes("?")) return child.path === route;
+          const path = child.path;
+          return location.pathname === path || (path !== "/" && location.pathname.startsWith(path + "/"));
+        });
+        if (active && (routeChanged || newGroups.has(item.path))) next[item.path] = true;
+      }
+      if (onboarding.menu) next[onboarding.menu] = true;
+      return Object.keys(next).some((key) => next[key] !== previous[key]) ? next : previous;
+    });
+  }, [location.pathname, location.search, mergedBaseMenuItems, onboarding.menu]);
+
+  useEffect(() => {
+    if (onboarding.guide) return;
+    try {
+      localStorage.setItem("komari.admin.submenus", JSON.stringify(openSubMenus));
+    } catch {
+      // 存储不可用时仍保留本次会话中的展开状态。
+    }
+  }, [openSubMenus, onboarding.guide]);
 
   // 侧边栏动画变体
   const sidebarVariants: Variants = {
@@ -304,18 +445,19 @@ const AdminPanelBar = ({ content }: AdminPanelBarProps) => {
   return (
     <>
       <Grid
+        className="km-admin-layout km-admin-panel-bar"
         columns={{ initial: "1fr", md: sidebarOpen ? "240px 1fr" : "0px 1fr" }} // 动态调整网格列
         rows={{ initial: "auto 1fr", md: "auto 1fr" }}
         style={{
           height: "100vh",
           width: "100vw",
-          overflow: "auto",
+          overflow: "hidden",
           backgroundColor: "var(--accent-1)",
         }}
       >
         {/* Navbar */}
         <motion.nav
-          className="col-span-2"
+          className="km-admin-panel-topbar col-span-2"
           initial={{ y: 0 }}
           animate={{ y: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
@@ -331,6 +473,8 @@ const AdminPanelBar = ({ content }: AdminPanelBarProps) => {
               <IconButton
                 variant="ghost"
                 onClick={() => setSidebarOpen(!sidebarOpen)}
+                title={t("common.menu_sidebar", "Menu")}
+                aria-label={t("common.menu_sidebar", "Menu")}
                 style={{
                   display: isMobile && sidebarOpen ? "none" : "flex",
                   color: "var(--gray-11)",
@@ -375,8 +519,10 @@ const AdminPanelBar = ({ content }: AdminPanelBarProps) => {
                                 </div>
                               )}
                             </div>
-                            <div className="whitespace-pre-wrap break-words">
-                              {r.body || ""}
+                            <div className="km-update-changelog markdown-body break-words">
+                              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                {r.body || ""}
+                              </ReactMarkdown>
                             </div>
                             <div
                               style={{
@@ -410,20 +556,18 @@ const AdminPanelBar = ({ content }: AdminPanelBarProps) => {
                     `${versionInfo.version} (${versionInfo.hash})`)}
               </label>
             </Flex>
-            <Flex gap="3" align="center" overflowX="auto">
-              {account && !account.logged_in && (
-                <LoginDialog
-                  autoOpen={true}
-                  showSettings={false}
-                  onLoginSuccess={() => {
-                    window.location.reload();
-                  }}
-                />
-              )}
+            <Flex gap="3" align="center" overflowX="auto" className="km-admin-panel-controls">
               <ThemeSwitch />
               <ColorSwitch />
               <LanguageSwitch />
-              <IconButton variant="soft" color="orange" onClick={logout}>
+              <IconButton
+                variant="soft"
+                color="orange"
+                className="km-admin-panel-account"
+                onClick={logout}
+                title={t("common.logout", "Logout")}
+                aria-label={t("common.logout", "Logout")}
+              >
                 <ExitIcon />
               </IconButton>
             </Flex>
@@ -437,6 +581,7 @@ const AdminPanelBar = ({ content }: AdminPanelBarProps) => {
             initial="closed"
             animate={sidebarOpen ? "open" : "closed"}
             exit="closed"
+            className="km-admin-panel-nav"
             style={{
               backgroundColor: "var(--accent-1)",
               height: "100%",
@@ -457,6 +602,8 @@ const AdminPanelBar = ({ content }: AdminPanelBarProps) => {
               {/* 关闭按钮 */}
               <IconButton
                 variant="soft"
+                title={t("common.close_sidebar", "Close menu")}
+                aria-label={t("common.close_sidebar", "Close menu")}
                 style={{
                   display: isMobile ? "flex" : "none",
                   margin: "8px 0px 0px 8px",
@@ -472,7 +619,7 @@ const AdminPanelBar = ({ content }: AdminPanelBarProps) => {
                 className="h-full md:mt-0 mt-6"
                 style={{ width: "100%" }}
               >
-                {[...baseMenuItems, ...extraMenuItems].map(
+                {mergedBaseMenuItems.map(
                   (item: ExtendedMenuItem) => {
                     // 支持 icon 为 URL/相对路径
                     const isOpen = openSubMenus[item.path];
@@ -485,7 +632,7 @@ const AdminPanelBar = ({ content }: AdminPanelBarProps) => {
                       const link = /^(https?:\/\/|\/|\.\/|\.\.\/)/.test(icon);
                       if (link) {
                         return (
-                          <img
+                          <InlineSvgIcon
                             src={icon}
                             alt={t(labelKey)}
                             style={{
@@ -625,20 +772,30 @@ const AdminPanelBar = ({ content }: AdminPanelBarProps) => {
                         </div>
                       );
                     }
+                    const isBottomStart =
+                      item.bottom && item.path === bottomStartPath;
                     return (
-                      <SidebarItem
+                      <div
                         key={item.path}
-                        to={item.path}
-                        icon={renderIcon(
-                          item.icon,
-                          item.labelKey,
-                          "flex w-4 h-5 items-center justify-center",
-                        )}
-                        children={item.rawLabel || t(item.labelKey)}
-                        onClick={() => isMobile && setSidebarOpen(false)}
-                        newTab={item.newTab}
-                        reloadDocument={item.reloadDocument}
-                      />
+                        style={
+                          isBottomStart
+                            ? { marginTop: "auto" }
+                            : undefined
+                        }
+                      >
+                        <SidebarItem
+                          to={item.path}
+                          icon={renderIcon(
+                            item.icon,
+                            item.labelKey,
+                            "flex w-4 h-5 items-center justify-center",
+                          )}
+                          children={item.rawLabel || t(item.labelKey)}
+                          onClick={() => isMobile && setSidebarOpen(false)}
+                          newTab={item.newTab}
+                          reloadDocument={item.reloadDocument}
+                        />
+                      </div>
                     );
                   },
                 )}
@@ -651,10 +808,12 @@ const AdminPanelBar = ({ content }: AdminPanelBarProps) => {
         <motion.div
           variants={contentVariants}
           animate={sidebarOpen ? "open" : "closed"}
+          className="km-admin-panel-content"
           style={{
             backgroundColor: "var(--accent-3)",
             display: isMobile && sidebarOpen ? "none" : "block",
             height: "100%", // Ensure the container takes full height
+            minHeight: 0,
             overflow: "hidden", // Prevent this container from scrolling
           }}
         >
@@ -662,9 +821,12 @@ const AdminPanelBar = ({ content }: AdminPanelBarProps) => {
             style={{
               backgroundColor: "var(--accent-1)",
               height: "100%",
+              minHeight: 0,
               borderRadius: "0",
               padding: isMobile ? "8px" : "16px",
-              overflowY: "auto",
+              overflowY: isConfigFormPage ? "hidden" : "auto",
+              display: isConfigFormPage ? "flex" : "block",
+              flexDirection: isConfigFormPage ? "column" : undefined,
               boxSizing: "border-box",
             }}
           >
@@ -687,10 +849,27 @@ const AdminPanelBar = ({ content }: AdminPanelBarProps) => {
                 </Text>
               </Callout.Text>
             </Callout.Root>
-            {content}
+            {isConfigFormPage ? (
+              <div className="min-h-0 flex-1">{content}</div>
+            ) : (
+              content
+            )}
           </div>
         </motion.div>
       </Grid>
+      {onboarding.guide && (
+        <GuidedTour
+          steps={onboarding.steps}
+          step={onboarding.step}
+          onStepChange={onboarding.changeStep}
+          onDismiss={onboarding.dismiss}
+          onShown={onboarding.onShown}
+          action={{
+            label: t(`onboarding.${onboarding.guide}.action`),
+            onClick: onboarding.act,
+          }}
+        />
+      )}
     </>
   );
 };
@@ -715,29 +894,33 @@ const SidebarItem = ({
 }) => {
   const location = useLocation();
   const isExternalLink = to.startsWith("http://") || to.startsWith("https://");
+  // 带 query 的菜单项（如 /admin/plugin-page?short=x）做全匹配；不带 query
+  // 的菜单项只比 pathname（如 /admin/plugins/config?short=x 点亮“插件配置”），
+  // 同时避免前缀兄弟路由（/admin/plugins 与 /admin/plugins/config）同时点亮。
   const isActive =
     !isExternalLink &&
     to !== "/" &&
-    (location.pathname === to ||
-      (to !== "/admin" && location.pathname.startsWith(to)));
+    (to.includes("?")
+      ? location.pathname + location.search === to
+      : location.pathname === to.split("?")[0]);
   const openInNewTab = newTab === true || (isExternalLink && newTab !== false);
 
   if (openInNewTab || reloadDocument) {
     return (
       <a
+        data-guide-nav={to}
         href={to}
         onClick={onClick}
         target={openInNewTab ? "_blank" : undefined}
         rel={openInNewTab ? "noopener noreferrer" : undefined}
-        className="group transition-colors duration-200 hover:bg-accent-3 rounded-md"
+        className="group block w-full rounded-md"
       >
         <Flex
-          className="p-2 gap-2 h-full"
+          className="p-2 gap-2 h-full transition-colors duration-200 group-hover:bg-accent-3 group-focus-visible:bg-accent-3"
           align="center"
           style={{
             borderLeft: "4px solid transparent",
             borderRadius: "6px",
-            backgroundColor: "transparent",
             color: "inherit",
             transition: "background-color 0.2s, border-color 0.2s",
           }}
@@ -761,19 +944,20 @@ const SidebarItem = ({
 
   return (
     <Link
+      data-guide-nav={to}
       to={to}
       onClick={onClick}
-      className="group transition-colors duration-200 hover:bg-accent-3 rounded-md"
+      className="group block w-full rounded-md"
     >
       <Flex
-        className="p-2 gap-2"
+        className={`p-2 gap-2 transition-colors duration-200 ${isActive ? "" : "group-hover:bg-accent-3 group-focus-visible:bg-accent-3"}`}
         align="center"
         style={{
           borderLeft: isActive
             ? "4px solid var(--accent-8)"
             : "4px solid transparent",
           borderRadius: "6px",
-          backgroundColor: isActive ? "var(--accent-4)" : "transparent",
+          backgroundColor: isActive ? "var(--accent-4)" : undefined,
           color: isActive ? "var(--accent-10)" : "inherit",
           transition: "background-color 0.2s, border-color 0.2s",
         }}
